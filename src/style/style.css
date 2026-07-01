@@ -1,0 +1,93 @@
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f4f7f4;
+    overflow-x: hidden
+}
+
+.botao-sidebar{ /*Personaliza a estética do botão*/
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    font-size: 30px;
+    background-color: transparent;
+    border: none;
+    color: #1f5221;
+    cursor: pointer;
+    z-index: 1001; /* Coloca acima de todos os elementos da página, deixando 'flutuante' */
+}
+
+.sidebar{
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100vh;
+    background-color: #ffffff;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+    transition: left 0.3s ease;
+    padding-top: 100px;
+    box-sizing: border-box;
+}
+
+.sidebar.aberto{
+    left:0;
+}
+
+.sidebar ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li a{
+    display: block;
+    padding: 15px 20px;
+    color: #555;
+    text-decoration: none;
+    font-weight: bold;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.sidebar ul li a:hover{
+    background-color: #1f5221;
+    color: white;
+    transition: 0.2s;
+}
+
+main{
+    padding: 20px ;
+    margin-top: 60px;
+    transition: margin-left 0.3s ease;
+}
+
+main.menu-aberto{
+    margin-left: 250px ;
+}
+
+.overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999; /* Fica atrás da sidebar, mas acima do conteúdo */
+    opacity: 0;
+    pointer-events: none; /* Ignora cliques enquanto invisível */
+    transition: opacity 0.3s ease;
+}
+
+.overlay.visivel{
+    opacity: 1;
+    pointer-events: auto;
+}
+
+
+@media (max-width: 768px){ /* Media Querie para a barra lateral se adaptar ao tamanho de um celular*/
+    main.menu-aberto{
+        margin-left: 0;
+    }
+}
+
