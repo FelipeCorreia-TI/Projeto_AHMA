@@ -5,16 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projeto A.H.M.A</title>
     <link rel="shortcut icon" href="image/favicon.ico" type="image/x-icon"> <!--Aqui adicionamos um ICON para a página-->
+    <link rel="stylesheet" href="style/style.css">
 </head>
 <body>
 
-    <input type="checkbox" id="menu"> <!--Criamos a caixa de clique para as 3 barras-->
-    <label for="menu" class="botao">
-        ☰
-    </label>
-    <aside class="sidebar"> <!--Aqui definimos todo o conteúdo que será representado dentro dessa caixa clicável-->
-    <h2>Menu</h2> <!--Menu da página que se encontrará dentro da sidebar-->
-    <ul>
+    <button class="botao-sidebar" id="BtnMenu" aria-label="Abrir Menu">☰</button>
+    <aside class="sidebar" id="sidebar"> <!--Aqui definimos todo o conteúdo que será representado dentro dessa caixa clicável-->
+    <ul><!--Menu da página que se encontrará dentro da sidebar-->
         <li><a href="#">Início</a></li>
         <li><a href="#">Plantopédia</a></li>
         <li><a href="#">Monitoramento do solo</a></li>
@@ -23,9 +20,16 @@
     </ul>
     </aside>
 
-    <main>
-        <h1>Bem vindo ao M.A.H.A</h1><!--Título principal da página-->
+    <div class="overlay" id="overlayMenu"></div>
+
+    <main id="conteudo-principal">
+        <h1>Bem vindo ao projeto M.A.H.A</h1><!--Título principal da página-->
+
         <p>conteúdo principal!</p>
     </main>
+
+
+
+    <script src="script/script.js"></script>
 </body>
 </html>
