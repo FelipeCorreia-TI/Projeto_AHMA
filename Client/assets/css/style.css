@@ -1,20 +1,52 @@
-body {
+@import url(fonts.css);
+
+*{
     margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background-color: #f4f7f4;
-    overflow-x: hidden
+    padding: 0;
+    box-sizing: border-box;
+
 }
 
+
+body {
+    font-family: "Fira Code", monospace;
+    background-color: #f4f7f6;
+    color: #333;
+}
+
+#app-container{
+    display: flex; /*Transforma todo o layout principal em flexbos*/
+    flex-direction: column; /*Define a direção - colunas*/
+    min-height: 100vh; /*Altura mínima é a TELA TODA*/
+}
+
+.top-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #1b382b;
+    color: white;
+    padding: 1rem 1.5rem;
+}
+
+.welcome-box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 50px;
+}
+
+.welcome-box h2{
+    font-size: 50px;
+}
+
+
 .botao-sidebar{ /*Personaliza a estética do botão*/
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    font-size: 30px;
-    background-color: transparent;
+    font-size: 1.5rem;
+    background: none;
     border: none;
-    color: #1f5221;
+    color: white;
     cursor: pointer;
-    z-index: 1001; /* Coloca acima de todos os elementos da página, deixando 'flutuante' */
 }
 
 .sidebar{
@@ -63,7 +95,7 @@ main{
 }
 
 main.menu-aberto{
-    margin-left: 250px ;
+    margin-left: 0px ;
 }
 
 .overlay{
@@ -84,7 +116,72 @@ main.menu-aberto{
     pointer-events: auto;
 }
 
+#conteudo-principal{
+    flex: 1;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
 
+.boxes-container{
+    display: flex;
+    flex-direction: row;
+    gap: 1.5rem;
+}
+
+.feature-box{
+    flex: 1 1 300px;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 1.5rem;
+    flex-wrap: wrap;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    border: 1px solid #e0e0e0;
+    width: 50px;
+}
+
+.box-header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 1rem;
+    justify-content: space-between;
+}
+
+.box-image{
+    width: 100%;
+    max-height: 500px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.box-image img{
+    width: 100%;
+    height: 100%;
+}
+
+.box-sobre{
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 1.5rem;
+    flex-wrap: wrap;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    border: 1px solid #e0e0e0;
+}
+
+.row-footer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #1b382b;
+    color: white;
+    padding: 1rem 1.5rem;
+}
 @media (max-width: 768px){ /* Media Querie para a barra lateral se adaptar ao tamanho de um celular*/
     main.menu-aberto{
         margin-left: 0;
