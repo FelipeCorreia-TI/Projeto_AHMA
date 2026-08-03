@@ -29,16 +29,6 @@ body {
     padding: 1rem 1.5rem;
 }
 
-.welcome-box{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-bottom: 50px;
-}
-
-.welcome-box h2{
-    font-size: 50px;
-}
 
 
 .botao-sidebar{ /*Personaliza a estética do botão*/
@@ -60,7 +50,6 @@ body {
     z-index: 1000;
     transition: left 0.3s ease;
     padding-top: 100px;
-    box-sizing: border-box;
 }
 
 .sidebar.aberto{
@@ -69,8 +58,6 @@ body {
 
 .sidebar ul{
     list-style: none;
-    padding: 0;
-    margin: 0;
 }
 
 .sidebar ul li a{
@@ -90,7 +77,7 @@ body {
 
 main{
     padding: 20px ;
-    margin-top: 60px;
+    margin-top: 30px;
     transition: margin-left 0.3s ease;
 }
 
@@ -118,20 +105,35 @@ main.menu-aberto{
 
 #conteudo-principal{
     flex: 1;
-    padding: 2rem;
+    padding: 1rem;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
 }
 
+.welcome-box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.welcome-box h2{
+    font-size: 1.8rem;
+}
+
+.welcome-box p{
+    padding-top: 20px;
+}
+
 .boxes-container{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: 1.5rem;
 }
 
-.feature-box{
-    flex: 1 1 300px;
+.feature-box, .box-sobre{
     display: flex;
     flex-direction: column;
     background-color: #ffffff;
@@ -140,20 +142,21 @@ main.menu-aberto{
     flex-wrap: wrap;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
     border: 1px solid #e0e0e0;
-    width: 50px;
+    width: 100%;
 }
 
 .box-header{
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center;
     padding-bottom: 1rem;
     justify-content: space-between;
 }
 
 .box-image{
     width: 100%;
-    max-height: 500px;
+    max-height: 250px;
     border-radius: 10px;
     overflow: hidden;
 }
@@ -161,28 +164,45 @@ main.menu-aberto{
 .box-image img{
     width: 100%;
     height: 100%;
-}
-
-.box-sobre{
-    display: flex;
-    flex-direction: column;
-    background-color: #ffffff;
-    border-radius: 15px;
-    padding: 1.5rem;
-    flex-wrap: wrap;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
-    border: 1px solid #e0e0e0;
+    object-fit: cover;
 }
 
 .row-footer{
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.5rem;
     background-color: #1b382b;
     color: white;
     padding: 1rem 1.5rem;
+    text-align: center;
 }
-@media (max-width: 768px){ /* Media Querie para a barra lateral se adaptar ao tamanho de um celular*/
+@media (min-width: 768px){ /* Media Querie para a barra lateral se adaptar ao tamanho de um celular*/
+    .welcome-box h2{
+        font-size: 2.5rem;
+    }
+
+    .boxes-container{
+        display: flex;
+        flex-direction: row;
+        gap: 1.5rem;
+    }
+    .box-image{
+        width: 100%;
+        max-height:500px;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+
+    .feature-box{
+        flex: 1 1 300px;
+        display: flex;
+        flex-direction: row;
+        width: 50px;
+    }
+
+
     main.menu-aberto{
         margin-left: 0;
     }
