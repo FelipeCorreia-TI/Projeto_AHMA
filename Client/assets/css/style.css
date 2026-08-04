@@ -56,16 +56,25 @@ body {
     object-fit: contain;
 }
 
-/* 3. DIREITA: Link de Login alinhado à direita do seu bloco */
+
 #login-content {
     justify-self: end;   
     font-size: 1rem;
     color: white;
     text-decoration: none;
     font-weight: bold;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    line-height: 1;
 }
 
-
+#icon-user{
+    height: 1.2rem;
+    width: auto;
+    display: block;
+}
 
 .botao-sidebar{ 
     font-size: 1rem;
@@ -128,9 +137,9 @@ main.menu-aberto{
     width: 100vw;
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 999; /* Fica atrás da sidebar, mas acima do conteúdo */
+    z-index: 999; 
     opacity: 0;
-    pointer-events: none; /* Ignora cliques enquanto invisível */
+    pointer-events: none; 
     transition: opacity 0.3s ease;
 }
 
@@ -187,6 +196,11 @@ main.menu-aberto{
     justify-content: space-between;
 }
 
+.feature-box{
+    text-decoration: none;
+    color: #333;
+}
+
 .box-image{
     width: 100%;
     max-height: 250px;
@@ -210,7 +224,8 @@ main.menu-aberto{
     padding: 1rem 1.5rem;
     text-align: center;
 }
-@media (min-width: 768px){ /* Media Querie para a barra lateral se adaptar ao tamanho de um celular*/
+
+@media (min-width: 768px){ 
     .welcome-box h2{
         font-size: 2.5rem;
     }
@@ -241,7 +256,7 @@ main.menu-aberto{
     }
 
     .banner-img {
-        max-height: 70px; /* O banner cresce um pouco no PC sem quebrar o layout */
+        max-height: 70px; 
     }
 
     #login-content {
@@ -249,7 +264,7 @@ main.menu-aberto{
     }
 
     .banner-img {
-        height: 50px; /* Aumenta a logo sutilmente em telas maiores */
+        height: 50px; 
     }
 
 }
