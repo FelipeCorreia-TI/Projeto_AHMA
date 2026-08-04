@@ -9,7 +9,7 @@
 
 
 body {
-    font-family: "Fira Code", monospace;
+    font-family: "Google Sans", sans-serif;
     background-color: #f4f7f6;
     color: #333;
 }
@@ -24,6 +24,7 @@ body {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
     background-color: #1b382b;
     color: white;
     padding: 1rem 1.5rem;
