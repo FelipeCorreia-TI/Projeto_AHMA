@@ -254,3 +254,337 @@ main.menu-aberto{
 
 }
 
+/* ==========================================================
+   PLANTOPÉDIA
+   ========================================================== */
+
+.pp-hero {
+    text-align: center;
+    padding-bottom: 4px;
+}
+
+.pp-hero h2 {
+    font-size: 1.8rem;
+    color: #1b382b;
+    margin-bottom: 6px;
+}
+
+.pp-hero p {
+    color: #555;
+}
+
+.pp-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.pp-btn-add {
+    flex: 0 0 auto;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 2px solid #1b382b;
+    background-color: #ffffff;
+    color: #1b382b;
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.pp-btn-add:hover {
+    background-color: #1b382b;
+    color: #ffffff;
+}
+
+.pp-search {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 999px;
+    padding: 8px 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.pp-search input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 0.95rem;
+    font-family: inherit;
+    color: #333;
+}
+
+.pp-search-icon {
+    opacity: 0.6;
+}
+
+.pp-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+.pp-card {
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    border-radius: 15px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.pp-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 14px rgba(0, 0, 0, 0.2);
+}
+
+.pp-card-photo {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background-color: #f4f7f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    overflow: hidden;
+}
+
+.pp-card-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.pp-card-body {
+    padding: 1rem 1.1rem 1.3rem;
+}
+
+.pp-card-body h4 {
+    margin: 4px 0;
+    font-size: 1.02rem;
+    color: #1b382b;
+}
+
+.pp-card-body p {
+    margin: 4px 0 0;
+    font-size: 0.85rem;
+    color: #666;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.pp-badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: bold;
+    color: #1b382b;
+    background-color: #e3ede4;
+    padding: 2px 10px;
+    border-radius: 999px;
+}
+
+.pp-empty {
+    text-align: center;
+    color: #777;
+    margin: 40px 0;
+}
+
+/* ---------- Modais ---------- */
+
+.pp-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(27, 56, 43, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 1100;
+}
+
+.pp-modal-overlay[hidden] {
+    display: none;
+}
+
+.pp-modal {
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 1.6rem 1.5rem;
+    width: 100%;
+    max-width: 420px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+}
+
+.pp-modal h3 {
+    color: #1b382b;
+    margin-bottom: 16px;
+}
+
+.pp-modal-close {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    border: none;
+    background: transparent;
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    color: #888;
+}
+
+.pp-modal label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 14px;
+}
+
+.pp-modal input[type="text"],
+.pp-modal select,
+.pp-modal textarea {
+    width: 100%;
+    margin-top: 6px;
+    padding: 9px 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    color: #333;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+.pp-modal input[type="text"]:focus,
+.pp-modal select:focus,
+.pp-modal textarea:focus {
+    outline: none;
+    border-color: #1b382b;
+}
+
+.pp-photo-upload {
+    margin-top: 6px;
+    border: 2px dashed #cfd8d3;
+    border-radius: 10px;
+    aspect-ratio: 16 / 9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.8rem;
+    color: #888;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.pp-photo-upload img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.pp-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.pp-btn-primary,
+.pp-btn-secondary,
+.pp-btn-danger {
+    border: none;
+    border-radius: 8px;
+    padding: 9px 18px;
+    font-size: 0.88rem;
+    font-weight: bold;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.pp-btn-primary {
+    background-color: #1b382b;
+    color: #ffffff;
+}
+
+.pp-btn-primary:hover {
+    background-color: #1f5221;
+}
+
+.pp-btn-secondary {
+    background-color: #eeeeee;
+    color: #444;
+}
+
+.pp-btn-secondary:hover {
+    background-color: #e0e0e0;
+}
+
+.pp-btn-danger {
+    background-color: #fdecec;
+    color: #c0392b;
+    width: 100%;
+    margin-top: 16px;
+}
+
+.pp-btn-danger:hover {
+    background-color: #f9d6d6;
+}
+
+.pp-detail {
+    text-align: center;
+    max-width: 380px;
+}
+
+.pp-detail-photo {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background-color: #f4f7f6;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.4rem;
+    overflow: hidden;
+    margin-bottom: 14px;
+}
+
+.pp-detail-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.pp-detail-scientific {
+    font-style: italic;
+    color: #777;
+    margin: 2px 0 8px;
+}
+
+.pp-detail-info {
+    text-align: left;
+    color: #333;
+    margin-top: 12px;
+    white-space: pre-wrap;
+}
+
+@media (min-width: 768px) {
+    .pp-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    }
+}
+
