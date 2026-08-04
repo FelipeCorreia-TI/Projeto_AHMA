@@ -15,29 +15,65 @@ body {
 }
 
 #app-container{
-    display: flex; /*Transforma todo o layout principal em flexbos*/
-    flex-direction: column; /*Define a direção - colunas*/
-    min-height: 100vh; /*Altura mínima é a TELA TODA*/
+    display: flex; 
+    flex-direction: column; 
+    min-height: 100vh; 
 }
 
-.top-header{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+
+
+.top-header {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
     background-color: #1b382b;
     color: white;
-    padding: 1rem 1.5rem;
+    padding: 0.75rem 1.25rem;
+    width: 100%;
 }
 
-
-
-.botao-sidebar{ /*Personaliza a estética do botão*/
-    font-size: 1.5rem;
+.botao-sidebar {
+    justify-self: start; 
+    font-size: 1rem;
     background: none;
     border: none;
     color: white;
     cursor: pointer;
+    font-weight: bold;
+}
+
+
+.logo-container {
+    justify-self: center; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.banner-img {
+    height: 40px;        
+    width: auto;        
+    object-fit: contain;
+}
+
+/* 3. DIREITA: Link de Login alinhado à direita do seu bloco */
+#login-content {
+    justify-self: end;   
+    font-size: 1rem;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+
+
+.botao-sidebar{ 
+    font-size: 1rem;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    max-height: 80px;
 }
 
 .sidebar{
@@ -78,7 +114,6 @@ body {
 
 main{
     padding: 20px ;
-    margin-top: 30px;
     transition: margin-left 0.3s ease;
 }
 
@@ -124,9 +159,6 @@ main.menu-aberto{
     font-size: 1.8rem;
 }
 
-.welcome-box p{
-    padding-top: 20px;
-}
 
 .boxes-container{
     display: flex;
@@ -207,5 +239,18 @@ main.menu-aberto{
     main.menu-aberto{
         margin-left: 0;
     }
+
+    .banner-img {
+        max-height: 70px; /* O banner cresce um pouco no PC sem quebrar o layout */
+    }
+
+    #login-content {
+        font-size: 1.1rem;
+    }
+
+    .banner-img {
+        height: 50px; /* Aumenta a logo sutilmente em telas maiores */
+    }
+
 }
 
