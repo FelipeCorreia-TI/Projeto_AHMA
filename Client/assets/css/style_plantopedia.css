@@ -1,3 +1,274 @@
+@import url(fonts.css);
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
+
+body {
+    font-family: "Google Sans", sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+}
+
+#app-container{
+    display: flex; 
+    flex-direction: column; 
+    min-height: 100vh; 
+}
+
+
+
+.top-header {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    background-color: #1b382b;
+    color: white;
+    padding: 0.75rem 1.25rem;
+    width: 100%;
+}
+
+.botao-sidebar {
+    justify-self: start; 
+    font-size: 1rem;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+
+.logo-container {
+    justify-self: center; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.banner-img {
+    height: 40px;        
+    width: auto;        
+    object-fit: contain;
+}
+
+
+#login-content {
+    justify-self: end;   
+    font-size: 1rem;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    line-height: 1;
+}
+
+#icon-user{
+    height: 1.2rem;
+    width: auto;
+    display: block;
+}
+
+.botao-sidebar{ 
+    font-size: 1rem;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    max-height: 80px;
+}
+
+.sidebar{
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100vh;
+    background-color: #ffffff;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+    transition: left 0.3s ease;
+    padding-top: 100px;
+}
+
+.sidebar.aberto{
+    left:0;
+}
+
+.sidebar ul{
+    list-style: none;
+}
+
+.sidebar ul li a{
+    display: block;
+    padding: 15px 20px;
+    color: #555;
+    text-decoration: none;
+    font-weight: bold;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.sidebar ul li a:hover{
+    background-color: #1f5221;
+    color: white;
+    transition: 0.2s;
+}
+
+main{
+    padding: 20px ;
+    transition: margin-left 0.3s ease;
+}
+
+main.menu-aberto{
+    margin-left: 0px ;
+}
+
+.overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999; 
+    opacity: 0;
+    pointer-events: none; 
+    transition: opacity 0.3s ease;
+}
+
+.overlay.visivel{
+    opacity: 1;
+    pointer-events: auto;
+}
+
+#conteudo-principal{
+    flex: 1;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.welcome-box{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.welcome-box h2{
+    font-size: 1.8rem;
+}
+
+
+.boxes-container{
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.feature-box, .box-sobre{
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding: 1.5rem;
+    flex-wrap: wrap;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    border: 1px solid #e0e0e0;
+    width: 100%;
+}
+
+.box-header{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-bottom: 1rem;
+    justify-content: space-between;
+}
+
+.feature-box{
+    text-decoration: none;
+    color: #333;
+}
+
+.box-image{
+    width: 100%;
+    max-height: 250px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.box-image img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.row-footer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.5rem;
+    background-color: #1b382b;
+    color: white;
+    padding: 1rem 1.5rem;
+    text-align: center;
+}
+
+@media (min-width: 768px){ 
+    .welcome-box h2{
+        font-size: 2.5rem;
+    }
+
+    .boxes-container{
+        display: flex;
+        flex-direction: row;
+        gap: 1.5rem;
+    }
+    .box-image{
+        width: 100%;
+        max-height:500px;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+
+    .feature-box{
+        flex: 1 1 300px;
+        display: flex;
+        flex-direction: row;
+        width: 50px;
+    }
+
+
+    main.menu-aberto{
+        margin-left: 0;
+    }
+
+    .banner-img {
+        max-height: 70px; 
+    }
+
+    #login-content {
+        font-size: 1.1rem;
+    }
+
+    .banner-img {
+        height: 50px; 
+    }
+
+}
+
 .pp-hero {
     text-align: center;
     padding-bottom: 4px;

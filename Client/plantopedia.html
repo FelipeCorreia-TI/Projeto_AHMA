@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Plataforma A.H.M.A</title>
     <link rel="shortcut icon" href="assets/icons/IconTransparente.ico" type="image/x-icon">
-    <link rel="stylesheet" href="assets/css/style_plantopedia.css">
+    <link rel="stylesheet" href="assets/css/style_plantopedia.css"
 </head>
 <body>
 
@@ -28,6 +28,8 @@
                 <img src="assets/images/bannerAHMA.png" alt="Logo A.H.M.A" class="banner-img">
             </div>
 
+            <a href="index.html" id="login-content"><img id="icon-user" src="assets/icons/icons8-voltar-24.png" alt="icon-usuario">Voltar</a>
+
         </header>
 
         <main id="conteudo-principal">
@@ -40,14 +42,13 @@
             <section class="pp-toolbar">
                 <button id="ppBtnAdd" class="pp-btn-add" title="Adicionar planta" aria-label="Adicionar planta">+</button>
                 <div class="pp-search">
-                    <span class="pp-search-icon">🔍</span>
                     <input type="text" id="ppSearch" placeholder="Buscar planta pelo nome...">
                 </div>
             </section>
 
             <section class="pp-grid" id="ppGrid"></section>
 
-            <p class="pp-empty" id="ppEmpty" hidden>Nenhuma planta encontrada. Que tal adicionar a primeira? 🌱</p>
+            <p class="pp-empty" id="ppEmpty" hidden>Nenhuma planta encontrada. Que tal adicionar a primeira?</p>
 
         </main>
 
@@ -61,7 +62,7 @@
                         Foto da planta
                         <div class="pp-photo-upload" id="ppPhotoUpload">
                             <img id="ppPhotoPreview" alt="" hidden>
-                            <span id="ppPhotoPlaceholder">🖼️<br>Clique para escolher uma imagem</span>
+                            <span id="ppPhotoPlaceholder"><br>Clique para escolher uma imagem</span>
                         </div>
                         <input type="file" id="ppPhotoInput" accept="image/*" hidden>
                     </label>
@@ -102,7 +103,7 @@
                 <button class="pp-modal-close" id="ppDetailClose" aria-label="Fechar">&times;</button>
                 <div class="pp-detail-photo" id="ppDetailPhotoWrap">
                     <img id="ppDetailImg" alt="" hidden>
-                    <span id="ppDetailPlaceholder">🖼️</span>
+                    <span id="ppDetailPlaceholder"></span>
                 </div>
                 <h3 id="ppDetailName"></h3>
                 <p class="pp-detail-scientific" id="ppDetailScientific"></p>
@@ -128,10 +129,7 @@
             const STORAGE_KEY = 'ahma_plantopedia_plants';
 
             const seed = [
-                { id: 's1', nome: 'Tomate', cientifico: 'Solanum lycopersicum', categoria: 'Hortaliça', info: 'Precisa de sol pleno e regas regulares. Colheita entre 60 e 90 dias.', foto: null },
-                { id: 's2', nome: 'Alface', cientifico: 'Lactuca sativa', categoria: 'Hortaliça', info: 'Prefere meia-sombra e solo úmido. Ciclo curto, cerca de 45 dias.', foto: null },
-                { id: 's3', nome: 'Manjericão', cientifico: 'Ocimum basilicum', categoria: 'Erva / Tempero', info: 'Gosta de sol e regas moderadas. Ótimo para repelir alguns insetos.', foto: null },
-                { id: 's4', nome: 'Morango', cientifico: 'Fragaria x ananassa', categoria: 'Fruta', info: 'Solo bem drenado e sol direto. Sensível a excesso de água.', foto: null }
+                
             ];
 
             function loadPlants() {
@@ -165,7 +163,7 @@
                     card.className = 'pp-card';
                     card.innerHTML = `
                         <div class="pp-card-photo">
-                            ${p.foto ? `<img src="${p.foto}" alt="${p.nome}">` : '🖼️'}
+                            ${p.foto ? `<img src="${p.foto}" alt="${p.nome}">` : ''}
                         </div>
                         <div class="pp-card-body">
                             <span class="pp-badge">${p.categoria}</span>
