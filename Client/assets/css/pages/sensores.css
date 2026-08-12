@@ -1,0 +1,11 @@
+/* ==========================================================================
+   PAGE: SENSORES
+   Essa tela reaproveita 100% o componente content-boxes; a única diferença
+   real em relação à home era a altura máxima da imagem do card (350px
+   em vez de 250px). Isso é tudo que sobra como "exclusivo" dessa página
+   depois de remover a duplicação.
+   ========================================================================== */
+
+.box-image {
+    max-height: 350px;
+}

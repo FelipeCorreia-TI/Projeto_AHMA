@@ -1,0 +1,335 @@
+/* ==========================================================================
+   PAGE: PLANTOPÉDIA
+   Estilos exclusivos da tela de catálogo de plantas (busca, cards,
+   modais de detalhe/cadastro).
+   ========================================================================== */
+
+.pp-hero {
+    text-align: center;
+    padding-bottom: 4px;
+}
+
+.pp-hero h2 {
+    font-size: 1.8rem;
+    color: var(--color-primary);
+    margin-bottom: 6px;
+}
+
+.pp-hero p {
+    color: var(--color-text-muted);
+}
+
+.pp-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.pp-btn-add {
+    flex: 0 0 auto;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 2px solid var(--color-primary);
+    background-color: var(--color-white);
+    color: var(--color-primary);
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.pp-btn-add:hover {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+}
+
+.pp-search {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--color-white);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    padding: 8px 16px;
+    box-shadow: var(--shadow-sm);
+}
+
+.pp-search input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 0.95rem;
+    font-family: inherit;
+    color: var(--color-text);
+}
+
+.pp-search-icon {
+    opacity: 0.6;
+}
+
+.pp-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+.pp-card {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-white);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.pp-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+}
+
+.pp-card-photo {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background-color: var(--color-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    overflow: hidden;
+}
+
+.pp-card-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.pp-card-body {
+    padding: 1rem 1.1rem 1.3rem;
+}
+
+.pp-card-body h4 {
+    margin: 4px 0;
+    font-size: 1.02rem;
+    color: var(--color-primary);
+}
+
+.pp-card-body p {
+    margin: 4px 0 0;
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.pp-badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: bold;
+    color: var(--color-primary);
+    background-color: var(--color-badge-bg);
+    padding: 2px 10px;
+    border-radius: var(--radius-pill);
+}
+
+.pp-empty {
+    text-align: center;
+    color: var(--color-text-lighter);
+    margin: 40px 0;
+}
+
+/* ---------- Modais ---------- */
+
+.pp-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: var(--shadow-modal-overlay);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 1100;
+}
+
+.pp-modal-overlay[hidden] {
+    display: none;
+}
+
+.pp-modal {
+    background-color: var(--color-white);
+    border-radius: var(--radius-lg);
+    padding: 1.6rem 1.5rem;
+    width: 100%;
+    max-width: 420px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: var(--shadow-md-strong);
+}
+
+.pp-modal h3 {
+    color: var(--color-primary);
+    margin-bottom: 16px;
+}
+
+.pp-modal-close {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    border: none;
+    background: transparent;
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--color-text-placeholder);
+}
+
+.pp-modal label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: var(--color-text);
+    margin-bottom: 14px;
+}
+
+.pp-modal input[type="text"],
+.pp-modal select,
+.pp-modal textarea {
+    width: 100%;
+    margin-top: 6px;
+    padding: 9px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    font-size: 0.9rem;
+    font-family: inherit;
+    color: var(--color-text);
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+.pp-modal input[type="text"]:focus,
+.pp-modal select:focus,
+.pp-modal textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+.pp-photo-upload {
+    margin-top: 6px;
+    border: 2px dashed #cfd8d3;
+    border-radius: var(--radius-md);
+    aspect-ratio: 16 / 9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--color-text-placeholder);
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.pp-photo-upload img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.pp-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.pp-btn-primary,
+.pp-btn-secondary,
+.pp-btn-danger {
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 9px 18px;
+    font-size: 0.88rem;
+    font-weight: bold;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.pp-btn-primary {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+}
+
+.pp-btn-primary:hover {
+    background-color: var(--color-primary-hover);
+}
+
+.pp-btn-secondary {
+    background-color: #eeeeee;
+    color: #444444;
+}
+
+.pp-btn-secondary:hover {
+    background-color: #e0e0e0;
+}
+
+.pp-btn-danger {
+    background-color: var(--color-danger-bg);
+    color: var(--color-danger);
+    width: 100%;
+    margin-top: 16px;
+}
+
+.pp-btn-danger:hover {
+    background-color: var(--color-danger-bg-hover);
+}
+
+.pp-detail {
+    text-align: center;
+    max-width: 380px;
+}
+
+.pp-detail-photo {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background-color: var(--color-bg);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.4rem;
+    overflow: hidden;
+    margin-bottom: 14px;
+}
+
+.pp-detail-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.pp-detail-scientific {
+    font-style: italic;
+    color: var(--color-text-lighter);
+    margin: 2px 0 8px;
+}
+
+.pp-detail-info {
+    text-align: left;
+    color: var(--color-text);
+    margin-top: 12px;
+    white-space: pre-wrap;
+}
+
+@media (min-width: 768px) {
+    .pp-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    }
+}
