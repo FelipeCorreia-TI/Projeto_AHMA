@@ -1,0 +1,55 @@
+/* ==========================================================================
+   VARIABLES
+   Tokens de cor, sombra, borda e espaçamento usados em todo o projeto.
+   Extraídos dos valores repetidos em style_main.css, style_plantopedia.css
+   e style_sensores.css.
+   ========================================================================== */
+
+:root {
+    /* Cores principais (marca) */
+    --color-primary: #1b382b;
+    --color-primary-hover: #1f5221;
+    --color-bg: #f4f7f6;
+    --color-white: #ffffff;
+
+    /* Textos */
+    --color-text: #333333;
+    --color-text-muted: #555555;
+    --color-text-light: #666666;
+    --color-text-lighter: #777777;
+    --color-text-placeholder: #888888;
+
+    /* Bordas */
+    --color-border: #e0e0e0;
+    --color-border-light: #f0f0f0;
+
+    /* Sombras */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.15);
+    --shadow-md-strong: 0 4px 6px rgba(0, 0, 0, 0.5); /* usada nos cards principais; ver nota no README */
+    --shadow-lg: 0 8px 14px rgba(0, 0, 0, 0.2);
+    --shadow-sidebar: 2px 0 10px rgba(0, 0, 0, 0.1);
+    --shadow-modal-overlay: rgba(27, 56, 43, 0.55);
+
+    /* Feedback / estados (usados na Plantopédia) */
+    --color-danger: #c0392b;
+    --color-danger-bg: #fdecec;
+    --color-danger-bg-hover: #f9d6d6;
+    --color-badge-bg: #e3ede4;
+
+    /* Raios de borda */
+    --radius-sm: 8px;
+    --radius-md: 10px;
+    --radius-lg: 15px;
+    --radius-pill: 999px;
+
+    /* Espaçamentos comuns */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 1.25rem;
+
+    /* Breakpoints (apenas referência — CSS não aceita var() dentro de @media,
+       então o valor 768px continua escrito diretamente nas media queries) */
+    --breakpoint-tablet: 768px;
+}

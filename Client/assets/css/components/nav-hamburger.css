@@ -1,0 +1,87 @@
+/* ==========================================================================
+   NAV HAMBURGER
+   Botão que abre/fecha o menu, o drawer lateral (.sidebar) e o overlay
+   escuro que aparece atrás dele.
+   ========================================================================== */
+
+.botao-sidebar {
+    justify-self: start;
+    font-size: 1rem;
+    font-weight: bold;
+    background: none;
+    border: none;
+    color: var(--color-white);
+    cursor: pointer;
+    max-height: 80px;
+    /* Nota: no original essa mesma classe era declarada duas vezes com
+       propriedades diferentes (uma delas sem max-height). Mesclei tudo
+       em uma única regra aqui. */
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100vh;
+    background-color: var(--color-white);
+    box-shadow: var(--shadow-sidebar);
+    z-index: 1000;
+    transition: left 0.3s ease;
+    padding-top: 100px;
+}
+
+.sidebar.aberto {
+    left: 0;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar ul li a {
+    display: block;
+    padding: 15px 20px;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    font-weight: bold;
+    border-bottom: 1px solid var(--color-border-light);
+}
+
+.sidebar ul li a:hover {
+    background-color: var(--color-primary-hover);
+    color: var(--color-white);
+    transition: 0.2s;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.overlay.visivel {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* O <main> reage à abertura do menu (deveria empurrar o conteúdo) */
+main {
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+}
+
+main.menu-aberto {
+    margin-left: 0px;
+    /* Nota: tanto no mobile quanto no desktop esse valor é 0 — ou seja,
+       o menu nunca empurra o conteúdo, ele só sobrepõe (o que combina
+       com o .overlay, mas então a classe "menu-aberto" no <main> não
+       está fazendo nada hoje). Ver README para sugestão. */
+}

@@ -1,0 +1,24 @@
+/* ==========================================================================
+   RESET
+   Reset padrão de margens, padding e box-sizing.
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+}
+
+/* Estrutura base que envolve toda a aplicação (idêntica nas 3 páginas) */
+#app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}

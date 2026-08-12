@@ -1,0 +1,99 @@
+/* ==========================================================================
+   CONTENT BOXES
+   Componente reutilizável: seção de boas-vindas + grade de cards
+   (usado na home e na tela de Sensores).
+
+   Este arquivo não estava na sua lista original — eu criei porque essas
+   classes (.feature-box, .box-image, .welcome-box...) se repetiam
+   IDÊNTICAS em style_main.css e style_sensores.css. Se preferir, dá pra
+   renomear/mesclar dentro de outro arquivo de componente.
+   ========================================================================== */
+
+#conteudo-principal {
+    flex: 1;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.welcome-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.welcome-box h2 {
+    font-size: 1.8rem;
+}
+
+.boxes-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.feature-box,
+.box-sobre {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-white);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    flex-wrap: wrap;
+    box-shadow: var(--shadow-md-strong);
+    border: 1px solid var(--color-border);
+    width: 100%;
+}
+
+.feature-box {
+    text-decoration: none;
+    color: var(--color-text);
+}
+
+.box-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-bottom: 1rem;
+    justify-content: space-between;
+}
+
+.box-image {
+    width: 100%;
+    max-height: 250px; /* na tela de Sensores isso é sobrescrito em pages/sensores.css */
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.box-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+@media (min-width: 768px) {
+    .welcome-box h2 {
+        font-size: 2.5rem;
+    }
+
+    .boxes-container {
+        flex-direction: row;
+    }
+
+    .box-image {
+        max-height: 500px;
+    }
+
+    .feature-box {
+        flex: 1 1 300px;
+        flex-direction: row;
+        width: 50px;
+        /* Nota: width: 50px junto com flex: 1 1 300px é estranho — o flex-basis
+           de 300px normalmente manda mais que o width. Vale revisar se
+           era intenção mesmo ou sobrou de um teste. */
+    }
+}

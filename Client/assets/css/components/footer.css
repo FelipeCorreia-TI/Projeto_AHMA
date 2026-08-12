@@ -1,0 +1,14 @@
+/* ==========================================================================
+   FOOTER
+   ========================================================================== */
+
+.row-footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.5rem;
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    padding: 1rem 1.5rem;
+    text-align: center;
+}
