@@ -1,155 +1,235 @@
+document.addEventListener("DOMContentLoaded", () => {
+  let plants = [];
+  let currentDetailId = null;
+  let pendingPhotoFile = null; // 📸 Agora guarda o ARQUIVO de foto real
 
-        (function () {
-            const STORAGE_KEY = 'ahma_plantopedia_plants';
+  // Elementos da DOM
+  const grid = document.getElementById("ppGrid");
+  const emptyState = document.getElementById("ppEmpty");
+  const searchInput = document.getElementById("ppSearch");
 
-            const seed = [
-                
-            ];
+  // ---- Modal: Adicionar planta ----
+  const formOverlay = document.getElementById("ppFormOverlay");
+  const form = document.getElementById("ppForm");
+  const photoUpload = document.getElementById("ppPhotoUpload");
+  const photoInput = document.getElementById("ppPhotoInput");
+  const photoPreview = document.getElementById("ppPhotoPreview");
+  const photoPlaceholder = document.getElementById("ppPhotoPlaceholder");
 
-            function loadPlants() {
-                try {
-                    const raw = localStorage.getItem(STORAGE_KEY);
-                    if (raw) return JSON.parse(raw);
-                } catch (e) { console.warn('Não foi possível ler o localStorage', e); }
-                return seed;
-            }
+  // ---- Modal: Detalhes ----
+  const detailOverlay = document.getElementById("ppDetailOverlay");
+  const detailImg = document.getElementById("ppDetailImg");
+  const detailPlaceholder = document.getElementById("ppDetailPlaceholder");
+  const detailName = document.getElementById("ppDetailName");
+  const detailScientific = document.getElementById("ppDetailScientific");
+  const detailCategory = document.getElementById("ppDetailCategory");
+  const detailInfo = document.getElementById("ppDetailInfo");
+  const detailDeleteBtn = document.getElementById("ppDetailDelete");
 
-            function savePlants(list) {
-                try {
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
-                } catch (e) { console.warn('Não foi possível salvar no localStorage', e); }
-            }
+  // 🔄 Buscar e renderizar plantas
+  async function fetchAndRender() {
+    try {
+      plants = await PlantService.listarPlantas();
+      renderGrid();
+    } catch (e) {
+      console.error("Falha ao carregar lista de plantas:", e);
+    }
+  }
 
-            let plants = loadPlants();
-            let pendingPhoto = null;
+  // 🎨 Desenha os cards na tela
+  function renderGrid() {
+    const term = searchInput ? searchInput.value.trim().toLowerCase() : "";
 
-            const grid = document.getElementById('ppGrid');
-            const emptyState = document.getElementById('ppEmpty');
-            const searchInput = document.getElementById('ppSearch');
+    const filtered = plants.filter(
+      (p) =>
+        p.nome_popular.toLowerCase().includes(term) ||
+        (p.nome_cientifico && p.nome_cientifico.toLowerCase().includes(term)),
+    );
 
-            function renderGrid() {
-                const term = searchInput.value.trim().toLowerCase();
-                const filtered = plants.filter(p => p.nome.toLowerCase().includes(term));
+    grid.innerHTML = "";
 
-                grid.innerHTML = '';
-                filtered.forEach(p => {
-                    const card = document.createElement('article');
-                    card.className = 'pp-card';
-                    card.innerHTML = `
-                        <div class="pp-card-photo">
-                            ${p.foto ? `<img src="${p.foto}" alt="${p.nome}">` : ''}
-                        </div>
-                        <div class="pp-card-body">
-                            <span class="pp-badge">${p.categoria}</span>
-                            <h4>${p.nome}</h4>
-                            <p>${p.info || 'Sem informações adicionadas ainda.'}</p>
-                        </div>
-                    `;
-                    card.addEventListener('click', () => openDetail(p.id));
-                    grid.appendChild(card);
-                });
+    filtered.forEach((p) => {
+      const card = document.createElement("article");
+      card.className = "pp-card";
 
-                emptyState.hidden = filtered.length !== 0;
-            }
+      const nomeCat = p.categoria_especimes?.nome_categoria || "Geral";
 
-            searchInput.addEventListener('input', renderGrid);
+      card.innerHTML = `
+        <div class="pp-card-photo">
+          ${p.foto_url ? `<img src="${p.foto_url}" alt="${p.nome_popular}">` : ""}
+        </div>
+        <div class="pp-card-body">
+          <span class="pp-badge">${nomeCat}</span>
+          <h4>${p.nome_popular}</h4>
+          <p><em>${p.nome_cientifico || ""}</em></p>
+        </div>
+      `;
 
-            // ---- Modal: adicionar planta ----
-            const formOverlay = document.getElementById('ppFormOverlay');
-            const form = document.getElementById('ppForm');
-            const photoUpload = document.getElementById('ppPhotoUpload');
-            const photoInput = document.getElementById('ppPhotoInput');
-            const photoPreview = document.getElementById('ppPhotoPreview');
-            const photoPlaceholder = document.getElementById('ppPhotoPlaceholder');
+      card.addEventListener("click", () => openDetail(p.id_planta));
+      grid.appendChild(card);
+    });
 
-            document.getElementById('ppBtnAdd').addEventListener('click', () => {
-                form.reset();
-                pendingPhoto = null;
-                photoPreview.hidden = true;
-                photoPlaceholder.hidden = false;
-                formOverlay.hidden = false;
-            });
+    if (emptyState) {
+      emptyState.hidden = filtered.length !== 0;
+    }
+  }
 
-            function closeForm() { formOverlay.hidden = true; }
-            document.getElementById('ppFormClose').addEventListener('click', closeForm);
-            document.getElementById('ppFormCancel').addEventListener('click', closeForm);
-            formOverlay.addEventListener('click', e => { if (e.target === formOverlay) closeForm(); });
+  // Evento de busca em tempo real
+  if (searchInput) {
+    searchInput.addEventListener("input", renderGrid);
+  }
 
-            photoUpload.addEventListener('click', () => photoInput.click());
-            photoInput.addEventListener('change', () => {
-                const file = photoInput.files[0];
-                if (!file) return;
-                const reader = new FileReader();
-                reader.onload = () => {
-                    pendingPhoto = reader.result;
-                    photoPreview.src = pendingPhoto;
-                    photoPreview.hidden = false;
-                    photoPlaceholder.hidden = true;
-                };
-                reader.readAsDataURL(file);
-            });
+  // ---- Modais: Abertura e Fechamento ----
+  const btnAdd = document.getElementById("ppBtnAdd");
+  if (btnAdd) {
+    btnAdd.addEventListener("click", () => {
+      form.reset();
+      pendingPhotoFile = null;
+      if (photoPreview) photoPreview.hidden = true;
+      if (photoPlaceholder) photoPlaceholder.hidden = false;
+      if (formOverlay) formOverlay.hidden = false;
+    });
+  }
 
-            form.addEventListener('submit', e => {
-                e.preventDefault();
-                const novaPlanta = {
-                    id: 'p' + Date.now(),
-                    nome: document.getElementById('ppName').value.trim(),
-                    cientifico: document.getElementById('ppScientific').value.trim(),
-                    categoria: document.getElementById('ppCategory').value,
-                    info: document.getElementById('ppInfo').value.trim(),
-                    foto: pendingPhoto
-                };
-                if (!novaPlanta.nome) return;
+  function closeForm() {
+    if (formOverlay) formOverlay.hidden = true;
+    pendingPhotoFile = null;
+  }
 
-                plants.unshift(novaPlanta);
-                savePlants(plants);
-                renderGrid();
-                closeForm();
-            });
+  const btnCloseForm = document.getElementById("ppFormClose");
+  const btnCancelForm = document.getElementById("ppFormCancel");
+  if (btnCloseForm) btnCloseForm.addEventListener("click", closeForm);
+  if (btnCancelForm) btnCancelForm.addEventListener("click", closeForm);
 
-            // ---- Modal: detalhes / exclusão ----
-            const detailOverlay = document.getElementById('ppDetailOverlay');
-            const detailImg = document.getElementById('ppDetailImg');
-            const detailPlaceholder = document.getElementById('ppDetailPlaceholder');
-            const detailName = document.getElementById('ppDetailName');
-            const detailScientific = document.getElementById('ppDetailScientific');
-            const detailCategory = document.getElementById('ppDetailCategory');
-            const detailInfo = document.getElementById('ppDetailInfo');
-            const detailDeleteBtn = document.getElementById('ppDetailDelete');
+  if (formOverlay) {
+    formOverlay.addEventListener("click", (e) => {
+      if (e.target === formOverlay) closeForm();
+    });
+  }
 
-            let currentDetailId = null;
+  // ---- Manipulação do Upload de Foto ----
+  if (photoUpload && photoInput) {
+    photoUpload.addEventListener("click", () => photoInput.click());
+  }
 
-            function openDetail(id) {
-                const p = plants.find(pl => pl.id === id);
-                if (!p) return;
-                currentDetailId = id;
+  if (photoInput) {
+    photoInput.addEventListener("change", () => {
+      const file = photoInput.files[0];
+      if (!file) return;
 
-                if (p.foto) {
-                    detailImg.src = p.foto;
-                    detailImg.hidden = false;
-                    detailPlaceholder.hidden = true;
-                } else {
-                    detailImg.hidden = true;
-                    detailPlaceholder.hidden = false;
-                }
-                detailName.textContent = p.nome;
-                detailScientific.textContent = p.cientifico || '';
-                detailCategory.textContent = p.categoria;
-                detailInfo.textContent = p.info || 'Sem informações adicionadas ainda.';
-                detailOverlay.hidden = false;
-            }
+      pendingPhotoFile = file; // 👈 Guarda o ARQUIVO cru para o upload
 
-            function closeDetail() { detailOverlay.hidden = true; currentDetailId = null; }
-            document.getElementById('ppDetailClose').addEventListener('click', closeDetail);
-            detailOverlay.addEventListener('click', e => { if (e.target === detailOverlay) closeDetail(); });
+      // Gera o preview local rápido sem pesar
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (photoPreview) {
+          photoPreview.src = reader.result;
+          photoPreview.hidden = false;
+        }
+        if (photoPlaceholder) {
+          photoPlaceholder.hidden = true;
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  }
 
-            detailDeleteBtn.addEventListener('click', () => {
-                if (!currentDetailId) return;
-                plants = plants.filter(p => p.id !== currentDetailId);
-                savePlants(plants);
-                renderGrid();
-                closeDetail();
-            });
+  // ➕ Envio do Formulário (CREATE)
+  if (form) {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-            renderGrid();
-    })();
+      try {
+        let fotoUrlFinal = null;
+
+        // 1. Envia a foto para o Storage se houver um arquivo pendente
+        if (pendingPhotoFile) {
+          fotoUrlFinal = await PlantService.enviarFoto(pendingPhotoFile);
+        }
+
+        // 2. Prepara os dados com a URL resultante
+        const novaPlanta = {
+          nome_popular: document.getElementById("ppName").value.trim(),
+          nome_cientifico: document.getElementById("ppScientific").value.trim(),
+          id_categoria: parseInt(
+            document.getElementById("ppCategory").value,
+            10,
+          ),
+          informacoes_adicionais: document
+            .getElementById("ppInfo")
+            .value.trim(),
+          foto_url: fotoUrlFinal, // URL leve do Storage
+        };
+
+        if (!novaPlanta.nome_popular) return;
+
+        // 3. Salva no banco de dados
+        await PlantService.adicionaPlanta(novaPlanta);
+        closeForm();
+        fetchAndRender();
+      } catch (error) {
+        alert("Erro ao salvar a planta no banco de dados.");
+        console.error(error);
+      }
+    });
+  }
+
+  // ---- Modal Detalhes e Exclusão (DELETE) ----
+  function openDetail(id) {
+    const p = plants.find((pl) => pl.id_planta === id);
+    if (!p) return;
+    currentDetailId = id;
+
+    if (p.foto_url) {
+      detailImg.src = p.foto_url;
+      detailImg.hidden = false;
+      if (detailPlaceholder) detailPlaceholder.hidden = true;
+    } else {
+      detailImg.hidden = true;
+      if (detailPlaceholder) detailPlaceholder.hidden = false;
+    }
+
+    detailName.textContent = p.nome_popular;
+    detailScientific.textContent = p.nome_cientifico || "";
+    detailCategory.textContent =
+      p.categoria_especimes?.nome_categoria || "Geral";
+    detailInfo.textContent =
+      p.informacoes_adicionais || "Sem informações adicionadas ainda.";
+    detailOverlay.hidden = false;
+  }
+
+  function closeDetail() {
+    if (detailOverlay) detailOverlay.hidden = true;
+    currentDetailId = null;
+  }
+
+  const btnCloseDetail = document.getElementById("ppDetailClose");
+  if (btnCloseDetail) btnCloseDetail.addEventListener("click", closeDetail);
+
+  if (detailOverlay) {
+    detailOverlay.addEventListener("click", (e) => {
+      if (e.target === detailOverlay) closeDetail();
+    });
+  }
+
+  // 🗑️ Excluir Planta (DELETE)
+  if (detailDeleteBtn) {
+    detailDeleteBtn.addEventListener("click", async () => {
+      if (!currentDetailId) return;
+
+      if (confirm("Tem certeza de que deseja excluir esta planta?")) {
+        try {
+          await PlantService.deletarPlanta(currentDetailId);
+          closeDetail();
+          fetchAndRender();
+        } catch (e) {
+          alert("Erro ao excluir a planta.");
+          console.error(e);
+        }
+      }
+    });
+  }
+
+  // Inicialização
+  fetchAndRender();
+});
