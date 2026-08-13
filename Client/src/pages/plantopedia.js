@@ -134,6 +134,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  
+
   // ➕ Envio do Formulário (CREATE)
   if (form) {
     form.addEventListener("submit", async (e) => {
@@ -228,6 +230,27 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
     });
+  }
+  // Dentro do evento de clique para excluir a planta
+  if (confirm("Tem certeza de que deseja excluir esta planta?")) {
+    try {
+      // 1. Encontra os dados da planta atual para pegar a URL da foto
+      const plantaAtual = plants.find((p) => p.id_planta === currentDetailId);
+
+      // 2. Se ela tiver uma foto, apaga primeiro no Storage
+      if (plantaAtual && plantaAtual.foto_url) {
+        await PlantService.deletarFotoStorage(plantaAtual.foto_url);
+      }
+
+      // 3. Deleta o registro no banco de dados
+      await PlantService.deletarPlanta(currentDetailId);
+
+      closeDetail();
+      fetchAndRender();
+    } catch (e) {
+      alert("Erro ao excluir a planta.");
+      console.error(e);
+    }
   }
 
   // Inicialização

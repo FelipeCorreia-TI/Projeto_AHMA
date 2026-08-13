@@ -66,23 +66,39 @@ const PlantService = {
   async enviarFoto(arquivo) {
     if (!arquivo) return null;
 
-    
     const nomeArquivo = `${Date.now()}_${arquivo.name}`;
 
-    
     const { data, error } = await _supabase.storage
-      .from('plantas-fotos')
+      .from("plantas-fotos")
       .upload(nomeArquivo, arquivo);
 
     if (error) {
-      console.error('Erro ao enviar foto para o Storage:', error.message);
+      console.error("Erro ao enviar foto para o Storage:", error.message);
       throw error;
     }
 
     const { data: publicUrlData } = _supabase.storage
-      .from('plantas-fotos')
+      .from("plantas-fotos")
       .getPublicUrl(nomeArquivo);
 
-    return publicUrlData.publicUrl; 
+    return publicUrlData.publicUrl;
+  },
+  async deletarFotoStorage(fotoUrl) {
+    if (!fotoUrl) return;
+
+    try {
+      // Pega apenas o nome do arquivo no final da URL
+      const nomeArquivo = fotoUrl.split("/").pop();
+
+      const { error } = await _supabase.storage
+        .from("plantas-fotos")
+        .remove([nomeArquivo]);
+
+      if (error) {
+        console.error("Erro ao deletar imagem do Storage:", error.message);
+      }
+    } catch (err) {
+      console.error("Falha ao processar deleção da foto:", err);
+    }
   },
 };
