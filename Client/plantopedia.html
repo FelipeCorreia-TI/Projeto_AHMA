@@ -1,126 +1,187 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Plataforma A.H.M.A</title>
-    <link rel="shortcut icon" href="assets/icons/IconTransparente.ico" type="image/x-icon">
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="assets/css/pages/plantopedia.css">
-</head>
-<body>
-
+    <link
+      rel="shortcut icon"
+      href="assets/icons/IconTransparente.ico"
+      type="image/x-icon"
+    />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/pages/plantopedia.css" />
+  </head>
+  <body>
     <aside class="sidebar" id="sidebar">
-        <ul class="menu-list">
-            <li><a href="index.html" class="active">Início</a></li>
-            <li><a href="sensores.html">Monitoramento do Solo</a></li>
-            <li><a href="plantopedia.html">Plantopédia</a></li>
-        </ul>
+      <ul class="menu-list">
+        <li><a href="index.html" class="active">Início</a></li>
+        <li><a href="sensores.html">Monitoramento do Solo</a></li>
+        <li><a href="plantopedia.html">Plantopédia</a></li>
+      </ul>
     </aside>
 
     <div class="overlay" id="overlayMenu"></div>
 
     <div id="app-container">
+      <header class="top-header">
+        <button class="botao-sidebar" id="BtnMenu" aria-label="Abrir Menu">
+          ☰ Menu
+        </button>
 
-        <header class="top-header">
-            <button class="botao-sidebar" id="BtnMenu" aria-label="Abrir Menu">☰ Menu</button>
-            
-            <div class="logo-container">
-                <a href="index.html"><img src="assets/images/bannerAHMA.png" alt="Logo A.H.M.A" class="banner-img"></a>
-            </div>
-
-            <a href="index.html" id="login-content"><img id="icon-user" src="assets/icons/icons8-voltar-24.png" alt="icon-usuario">Voltar</a>
-
-        </header>
-
-        <main id="conteudo-principal">
-
-            <section class="pp-hero">
-                <h2>Plantopédia</h2>
-                <p>Conheça as espécies da nossa horta e adicione novas plantas com fotos e informações.</p>
-            </section>
-
-            <section class="pp-toolbar">
-                <button id="ppBtnAdd" class="pp-btn-add" title="Adicionar planta" aria-label="Adicionar planta">+</button>
-                <div class="pp-search">
-                    <input type="text" id="ppSearch" placeholder="Buscar planta pelo nome...">
-                </div>
-            </section>
-
-            <section class="pp-grid" id="ppGrid"></section>
-
-            <p class="pp-empty" id="ppEmpty" hidden>Nenhuma planta encontrada. Que tal adicionar a primeira?</p>
-
-        </main>
-
-        <!-- Modal: adicionar planta -->
-        <div class="pp-modal-overlay" id="ppFormOverlay" hidden>
-            <div class="pp-modal">
-                <button class="pp-modal-close" id="ppFormClose" aria-label="Fechar">&times;</button>
-                <h3>Adicionar planta</h3>
-                <form id="ppForm">
-                    <label class="pp-photo-label" for="ppPhotoInput">
-                        Foto da planta
-                        <div class="pp-photo-upload" id="ppPhotoUpload">
-                            <img id="ppPhotoPreview" alt="" hidden>
-                            <span id="ppPhotoPlaceholder"><br>Clique para escolher uma imagem</span>
-                        </div>
-                        <input type="file" id="ppPhotoInput" accept="image/*" hidden>
-                    </label>
-
-                    <label>Nome popular
-                        <input type="text" id="ppName" required placeholder="Ex: Manjericão">
-                    </label>
-
-                    <label>Nome científico
-                        <input type="text" id="ppScientific" placeholder="Ex: Ocimum basilicum">
-                    </label>
-
-                    <label>Categoria
-                        <select id="ppCategory">
-                            <option>Hortaliça</option>
-                            <option>Erva / Tempero</option>
-                            <option>Fruta</option>
-                            <option>Flor</option>
-                            <option>Outra</option>
-                        </select>
-                    </label>
-
-                    <label>Cuidados / Informações
-                        <textarea id="ppInfo" rows="4" placeholder="Rega, luz solar, solo, curiosidades..."></textarea>
-                    </label>
-
-                    <div class="pp-modal-actions">
-                        <button type="button" class="pp-btn-secondary" id="ppFormCancel">Cancelar</button>
-                        <button type="submit" class="pp-btn-primary">Salvar planta</button>
-                    </div>
-                </form>
-            </div>
+        <div class="logo-container">
+          <a href="index.html"
+            ><img
+              src="assets/images/bannerAHMA.png"
+              alt="Logo A.H.M.A"
+              class="banner-img"
+          /></a>
         </div>
 
-        <!-- Modal: detalhes da planta -->
-        <div class="pp-modal-overlay" id="ppDetailOverlay" hidden>
-            <div class="pp-modal pp-detail">
-                <button class="pp-modal-close" id="ppDetailClose" aria-label="Fechar">&times;</button>
-                <div class="pp-detail-photo" id="ppDetailPhotoWrap">
-                    <img id="ppDetailImg" alt="" hidden>
-                    <span id="ppDetailPlaceholder"></span>
-                </div>
-                <h3 id="ppDetailName"></h3>
-                <p class="pp-detail-scientific" id="ppDetailScientific"></p>
-                <span class="pp-badge" id="ppDetailCategory"></span>
-                <p class="pp-detail-info" id="ppDetailInfo"></p>
-                <button class="pp-btn-danger" id="ppDetailDelete">Excluir planta</button>
+        <a href="index.html" id="login-content"
+          ><img
+            id="icon-user"
+            src="assets/icons/icons8-voltar-24.png"
+            alt="icon-usuario"
+          />Voltar</a
+        >
+      </header>
+
+      <main id="conteudo-principal">
+        <section class="pp-hero">
+          <h2>Plantopédia</h2>
+          <p>
+            Conheça as espécies da nossa horta e adicione novas plantas com
+            fotos e informações.
+          </p>
+        </section>
+
+        <section class="pp-toolbar">
+          <button
+            id="ppBtnAdd"
+            class="pp-btn-add"
+            title="Adicionar planta"
+            aria-label="Adicionar planta"
+          >
+            +
+          </button>
+          <div class="pp-search">
+            <input
+              type="text"
+              id="ppSearch"
+              placeholder="Buscar planta pelo nome..."
+            />
+          </div>
+        </section>
+
+        <section class="pp-grid" id="ppGrid"></section>
+
+        <p class="pp-empty" id="ppEmpty" hidden>
+          Nenhuma planta encontrada. Que tal adicionar a primeira?
+        </p>
+      </main>
+
+      <!-- Modal: adicionar planta -->
+      <div class="pp-modal-overlay" id="ppFormOverlay" hidden>
+        <div class="pp-modal">
+          <button class="pp-modal-close" id="ppFormClose" aria-label="Fechar">
+            &times;
+          </button>
+          <h3>Adicionar planta</h3>
+          <form id="ppForm">
+            <label class="pp-photo-label" for="ppPhotoInput">
+              Foto da planta
+              <div class="pp-photo-upload" id="ppPhotoUpload">
+                <img id="ppPhotoPreview" alt="" hidden />
+                <span id="ppPhotoPlaceholder"
+                  ><br />Clique para escolher uma imagem</span
+                >
+              </div>
+              <input type="file" id="ppPhotoInput" accept="image/*" hidden />
+            </label>
+
+            <label
+              >Nome popular
+              <input
+                type="text"
+                id="ppName"
+                required
+                placeholder="Ex: Manjericão"
+              />
+            </label>
+
+            <label
+              >Nome científico
+              <input
+                type="text"
+                id="ppScientific"
+                placeholder="Ex: Ocimum basilicum"
+              />
+            </label>
+
+            <label
+              >Categoria
+              <select id="ppCategory">
+                <option>Hortaliça</option>
+                <option>Erva / Tempero</option>
+                <option>Fruta</option>
+                <option>Flor</option>
+                <option>Outra</option>
+              </select>
+            </label>
+
+            <label
+              >Cuidados / Informações
+              <textarea
+                id="ppInfo"
+                rows="4"
+                placeholder="Rega, luz solar, solo, curiosidades..."
+              ></textarea>
+            </label>
+
+            <div class="pp-modal-actions">
+              <button type="button" class="pp-btn-secondary" id="ppFormCancel">
+                Cancelar
+              </button>
+              <button type="submit" class="pp-btn-primary">
+                Salvar planta
+              </button>
             </div>
+          </form>
         </div>
+      </div>
 
-        <footer class="row-footer" id="contato">
-            <div class="footer-content">
-                <p>&copy; 2026 <strong>A.H.M.A</strong>. Todos os direitos reservados.</p>
-                <p class="devs-credits">Desenvolvido por <strong>Felipe Correia</strong>, <strong>Yago Montouro</strong> e <strong>Pedro Hiago</strong>.</p>
-            </div>
-        </footer>
+      <!-- Modal: detalhes da planta -->
+      <div class="pp-modal-overlay" id="ppDetailOverlay" hidden>
+        <div class="pp-modal pp-detail">
+          <button class="pp-modal-close" id="ppDetailClose" aria-label="Fechar">
+            &times;
+          </button>
+          <div class="pp-detail-photo" id="ppDetailPhotoWrap">
+            <img id="ppDetailImg" alt="" hidden />
+            <span id="ppDetailPlaceholder"></span>
+          </div>
+          <h3 id="ppDetailName"></h3>
+          <p class="pp-detail-scientific" id="ppDetailScientific"></p>
+          <span class="pp-badge" id="ppDetailCategory"></span>
+          <p class="pp-detail-info" id="ppDetailInfo"></p>
+          <button class="pp-btn-danger" id="ppDetailDelete">
+            Excluir planta
+          </button>
+        </div>
+      </div>
 
+      <footer class="row-footer" id="contato">
+        <div class="footer-content">
+          <p>
+            &copy; 2026 <strong>A.H.M.A</strong>. Todos os direitos reservados.
+          </p>
+          <p class="devs-credits">
+            Desenvolvido por <strong>Felipe Correia</strong>,
+            <strong>Yago Montouro</strong> e <strong>Pedro Hiago</strong>.
+          </p>
+        </div>
+      </footer>
     </div>
 
     <script src="src/components/menu-hamburger.js"></script>
@@ -129,13 +190,8 @@
 
     <script src="src/config/supabase.js"></script>
 
-    <script src="src/services/plant-service.js" ></script>
+    <script src="src/services/plant-service.js"></script>
 
-    <script src="src/pages/plantopedia.js" ></script>
-    
-    
-
-    
-
-</body>
+    <script src="src/pages/plantopedia.js"></script>
+  </body>
 </html>

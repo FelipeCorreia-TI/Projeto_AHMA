@@ -25,6 +25,14 @@ const PlantService = {
     }
     return data;
   },
+  async listarCategorias() {
+    const { data, error } = await _supabase
+      .from("categoria_especimes")
+      .select("id_categoria, nome_categoria");
+
+    if (error) throw error;
+    return data;
+  },
   async adicionaPlanta(dadosPlanta) {
     const { data, error } = await _supabase
       .from("especimes")
@@ -54,5 +62,27 @@ const PlantService = {
       throw true;
     }
     return true;
+  },
+  async enviarFoto(arquivo) {
+    if (!arquivo) return null;
+
+    
+    const nomeArquivo = `${Date.now()}_${arquivo.name}`;
+
+    
+    const { data, error } = await _supabase.storage
+      .from('plantas-fotos')
+      .upload(nomeArquivo, arquivo);
+
+    if (error) {
+      console.error('Erro ao enviar foto para o Storage:', error.message);
+      throw error;
+    }
+
+    const { data: publicUrlData } = _supabase.storage
+      .from('plantas-fotos')
+      .getPublicUrl(nomeArquivo);
+
+    return publicUrlData.publicUrl; 
   },
 };
