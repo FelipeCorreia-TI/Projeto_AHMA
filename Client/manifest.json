@@ -3,31 +3,31 @@
   "name": "Projeto Automação Horta Mello Ayres",
   "icons": [
     {
-      "src": "/icons/App_icon192x192.png",
+      "src": "./assets/icons/App_icon192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/icons/App_icon512x512.png",
+      "src": "./assets/icons/App_icon512x512.png",
       "sizes": "512x512",
       "type": "image/png"
     },
     {
-      "src": "/icons/App_icon192x192Maskable.png",
+      "src": "./assets/icons/App_icon192x192Maskable.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/icons/App_icon512x512Maskable.png",
+      "src": "./assets/icons/App_icon512x512Maskable.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     }
   ],
-  "start_url": "/Client",
-  "backgroud_color": "#1b382b",
-  "theme_color": "2e7d32",
+  "start_url": "./",
+  "background_color": "#1b382b",
+  "theme_color": "#2e7d32",
   "display": "standalone",
   "orientation": "portrait"
 }
