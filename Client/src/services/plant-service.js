@@ -83,19 +83,29 @@ const PlantService = {
 
     return publicUrlData.publicUrl;
   },
+  // No src/services/plant-service.js
+
   async deletarFotoStorage(fotoUrl) {
     if (!fotoUrl) return;
 
     try {
-      // Pega apenas o nome do arquivo no final da URL
-      const nomeArquivo = fotoUrl.split("/").pop();
+      // 1. Remove qualquer parâmetro de busca no final da URL (ex: ?t=2026-08-17...)
+      const urlLimpa = fotoUrl.split("?")[0];
 
-      const { error } = await _supabase.storage
+      // 2. Extrai apenas o nome exato do arquivo após a última barra '/'
+      const nomeArquivo = urlLimpa.substring(urlLimpa.lastIndexOf("/") + 1);
+
+      if (!nomeArquivo) return;
+
+      // 3. Executa a remoção no bucket correto
+      const { data, error } = await _supabase.storage
         .from("plantas-fotos")
         .remove([nomeArquivo]);
 
       if (error) {
         console.error("Erro ao deletar imagem do Storage:", error.message);
+      } else {
+        console.log("Imagem removida com sucesso do Storage:", data);
       }
     } catch (err) {
       console.error("Falha ao processar deleção da foto:", err);
