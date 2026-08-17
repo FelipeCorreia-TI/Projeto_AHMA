@@ -9,10 +9,10 @@
       href="assets/icons/IconTransparente.ico"
       type="image/x-icon"
     />
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css" />
     <link rel="manifest" href="./manifest.json" />
     <link rel="apple-touch-icon" href="./assets/icons/apple-touch-icon.png" />
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <aside class="sidebar" id="sidebar">
@@ -134,7 +134,7 @@
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", () => {
           navigator.serviceWorker
-            .register("./sw.js")
+            .register("./sw.js") // ou "../sw.js" dentro de monitoramento/
             .then((reg) => console.log("Service Worker registrado!", reg.scope))
             .catch((err) =>
               console.error("Erro ao registrar Service Worker:", err),
