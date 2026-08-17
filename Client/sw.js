@@ -1,62 +1,76 @@
 const CACHE_NAME = "A.H.M.A-v1";
 const ASSETS_TO_CACHE = [
-  "/",
-  "/index.html",
-  "/login.html",
-  "/plantopedia.html",
-  "/sensores.html",
-  "/manifest.json",
-  "/sw.js",
+  "./",
+  "./index.html",
+  "./login.html",
+  "./plantopedia.html",
+  "./sensores.html",
+  "./manifest.json",
 
-  // Serviços e utilitários
-  "/services/plant-service.js",
+  "./src/services/plant-service.js",
 
-  // CSS Base
-  "/assets/css/base/reset.css",
-  "/assets/css/base/typography.css",
-  "/assets/css/base/variables.css",
+  "./assets/css/base/reset.css",
+  "./assets/css/base/typography.css",
+  "./assets/css/base/variables.css",
 
-  // CSS Componentes
-  "/assets/css/components/content-boxes.css",
-  "/assets/css/components/footer.css",
-  "/assets/css/components/header.css",
-  "/assets/css/components/nav-hamburger.css",
+  "./assets/css/components/content-boxes.css",
+  "./assets/css/components/footer.css",
+  "./assets/css/components/header.css",
+  "./assets/css/components/nav-hamburger.css",
 
-  // CSS Páginas
-  "/assets/css/pages/login.css",
-  "/assets/css/pages/plantopedia.css",
-  "/assets/css/pages/sensores.css",
+  "./assets/css/pages/login.css",
+  "./assets/css/pages/plantopedia.css",
+  "./assets/css/pages/sensores.css",
 ];
-self.addEventListener('activate', (event) => {
+
+self.addEventListener("install", (event) => {
+  self.skipWaiting();
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
-      return Promise.all(
-        cacheNames.map((cache) => {
-          if (cache !== CACHE_NAME) {
-            console.log('[PWA] Removendo cache antigo:', cache);
-            return caches.delete(cache);
-          }
-        })
+    caches.open(CACHE_NAME).then((cache) => {
+      return Promise.allSettled(
+        ASSETS_TO_CACHE.map((url) =>
+          cache
+            .add(url)
+            .catch((err) => console.warn("[PWA] Falhou ao cachear:", url, err)),
+        ),
       );
-    }).then(() => self.clients.claim())
+    }),
   );
 });
 
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    caches
+      .keys()
+      .then((cacheNames) => {
+        return Promise.all(
+          cacheNames.map((cache) => {
+            if (cache !== CACHE_NAME) {
+              console.log("[PWA] Removendo cache antigo:", cache);
+              return caches.delete(cache);
+            }
+          }),
+        );
+      })
+      .then(() => self.clients.claim()),
+  );
+});
 
-self.addEventListener('fetch', (event) => {
- 
-  if (event.request.url.includes('supabase.co')) {
-    return;
-  }
+self.addEventListener("fetch", (event) => {
+  if (event.request.url.includes("supabase.co")) return;
 
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
-      
-      if (cachedResponse) {
-        return cachedResponse;
-      }
-      // 
-      return fetch(event.request);
-    })
+      const fetchPromise = fetch(event.request)
+        .then((networkResponse) => {
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, networkResponse.clone());
+          });
+          return networkResponse;
+        })
+        .catch(() => cachedResponse); // se offline, cai no cache
+
+      return cachedResponse || fetchPromise;
+    }),
   );
 });
