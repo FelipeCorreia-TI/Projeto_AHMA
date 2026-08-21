@@ -4,6 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Plataforma A.H.M.A</title>
+
+    <!-- 🛡️ EXECUTA O GUARD ANTES DE RENDERIZAR QUALQUER ELEMENTO NA TELA -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module">
+      import { protegerRota } from "./src/config/auth-guard.js";
+      protegerRota();
+    </script>
+
     <link
       rel="shortcut icon"
       href="assets/icons/IconTransparente.ico"
@@ -42,12 +50,13 @@
           /></a>
         </div>
 
-        <a href="login.html" id="login-content"
+        <!-- 🚪 Mantido idêntico ao layout original -->
+        <a href="#" id="login-content"
           ><img
             id="icon-user"
             src="assets/icons/user-icon.png"
             alt="icon-usuario"
-          />Login</a
+          />Sair</a
         >
       </header>
 
@@ -129,18 +138,24 @@
         </div>
       </footer>
     </div>
+
     <script src="../Client/src/components/menu-hamburger.js"></script>
     <script>
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", () => {
           navigator.serviceWorker
-            .register("./sw.js") // ou "../sw.js" dentro de monitoramento/
+            .register("./sw.js")
             .then((reg) => console.log("Service Worker registrado!", reg.scope))
             .catch((err) =>
               console.error("Erro ao registrar Service Worker:", err),
             );
         });
       }
+    </script>
+
+    <script type="module">
+      import { inicializarLogout } from "./src/services/logout.js";
+      inicializarLogout();
     </script>
   </body>
 </html>

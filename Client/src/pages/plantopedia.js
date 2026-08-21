@@ -1,7 +1,16 @@
-document.addEventListener("DOMContentLoaded", () => {
+import { protegerRota } from "../config/auth-guard.js";
+import { PlantService } from "../services/plantService.js";
+
+document.addEventListener("DOMContentLoaded", async () => {
+  // 🛡️ Garante autenticação e obtém a permissão baseada na coluna nivel_acesso (TI / AGRO) da tabela 'cadastro'
+  const dadosAutenticacao = await protegerRota();
+  if (!dadosAutenticacao) return;
+
+  const { eAdmin } = dadosAutenticacao;
+
   let plants = [];
   let currentDetailId = null;
-  let pendingPhotoFile = null; // 📸 Agora guarda o ARQUIVO de foto real
+  let pendingPhotoFile = null;
 
   // Elementos da DOM
   const grid = document.getElementById("ppGrid");
@@ -25,6 +34,21 @@ document.addEventListener("DOMContentLoaded", () => {
   const detailCategory = document.getElementById("ppDetailCategory");
   const detailInfo = document.getElementById("ppDetailInfo");
   const detailDeleteBtn = document.getElementById("ppDetailDelete");
+
+  // 🔒 Botão Adicionar: Exibe apenas para ADMs (TI / AGRO)
+  const btnAdd = document.getElementById("ppBtnAdd");
+  if (btnAdd) {
+    btnAdd.style.display = eAdmin ? "flex" : "none";
+
+    btnAdd.addEventListener("click", () => {
+      if (!eAdmin) return;
+      form.reset();
+      pendingPhotoFile = null;
+      if (photoPreview) photoPreview.hidden = true;
+      if (photoPlaceholder) photoPlaceholder.hidden = false;
+      if (formOverlay) formOverlay.hidden = false;
+    });
+  }
 
   // 🔄 Buscar e renderizar plantas
   async function fetchAndRender() {
@@ -79,18 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
     searchInput.addEventListener("input", renderGrid);
   }
 
-  // ---- Modais: Abertura e Fechamento ----
-  const btnAdd = document.getElementById("ppBtnAdd");
-  if (btnAdd) {
-    btnAdd.addEventListener("click", () => {
-      form.reset();
-      pendingPhotoFile = null;
-      if (photoPreview) photoPreview.hidden = true;
-      if (photoPlaceholder) photoPlaceholder.hidden = false;
-      if (formOverlay) formOverlay.hidden = false;
-    });
-  }
-
+  // ---- Modais: Fechamento ----
   function closeForm() {
     if (formOverlay) formOverlay.hidden = true;
     pendingPhotoFile = null;
@@ -117,9 +130,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const file = photoInput.files[0];
       if (!file) return;
 
-      pendingPhotoFile = file; // 👈 Guarda o ARQUIVO cru para o upload
+      pendingPhotoFile = file;
 
-      // Gera o preview local rápido sem pesar
       const reader = new FileReader();
       reader.onload = () => {
         if (photoPreview) {
@@ -139,15 +151,18 @@ document.addEventListener("DOMContentLoaded", () => {
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
+      if (!eAdmin) {
+        alert("Apenas administradores (TI / AGRO) podem cadastrar plantas.");
+        return;
+      }
+
       try {
         let fotoUrlFinal = null;
 
-        // 1. Envia a foto para o Storage se houver um arquivo pendente
         if (pendingPhotoFile) {
           fotoUrlFinal = await PlantService.enviarFoto(pendingPhotoFile);
         }
 
-        // 2. Prepara os dados com a URL resultante
         const novaPlanta = {
           nome_popular: document.getElementById("ppName").value.trim(),
           nome_cientifico: document.getElementById("ppScientific").value.trim(),
@@ -158,12 +173,11 @@ document.addEventListener("DOMContentLoaded", () => {
           informacoes_adicionais: document
             .getElementById("ppInfo")
             .value.trim(),
-          foto_url: fotoUrlFinal, // URL leve do Storage
+          foto_url: fotoUrlFinal,
         };
 
         if (!novaPlanta.nome_popular) return;
 
-        // 3. Salva no banco de dados
         await PlantService.adicionaPlanta(novaPlanta);
         closeForm();
         fetchAndRender();
@@ -195,6 +209,12 @@ document.addEventListener("DOMContentLoaded", () => {
       p.categoria_especimes?.nome_categoria || "Geral";
     detailInfo.textContent =
       p.informacoes_adicionais || "Sem informações adicionadas ainda.";
+
+    // 🔒 Botão de Excluir: Exibe no modal apenas se for ADM
+    if (detailDeleteBtn) {
+      detailDeleteBtn.style.display = eAdmin ? "block" : "none";
+    }
+
     detailOverlay.hidden = false;
   }
 
@@ -213,30 +233,34 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // 🗑️ Excluir Planta (DELETE)
-  detailDeleteBtn.addEventListener("click", async () => {
-    if (!currentDetailId) return;
+  if (detailDeleteBtn) {
+    detailDeleteBtn.addEventListener("click", async () => {
+      if (!currentDetailId) return;
 
-    if (confirm("Tem certeza de que deseja excluir esta planta?")) {
-      try {
-        // 1. Encontra os dados da planta atual para pegar a URL da foto
-        const plantaAtual = plants.find((p) => p.id_planta === currentDetailId);
-
-        // 2. Se ela tiver uma foto, apaga primeiro no Storage
-        if (plantaAtual && plantaAtual.foto_url) {
-          await PlantService.deletarFotoStorage(plantaAtual.foto_url);
-        }
-
-        // 3. Deleta o registro no banco de dados
-        await PlantService.deletarPlanta(currentDetailId);
-
-        closeDetail();
-        fetchAndRender();
-      } catch (e) {
-        alert("Erro ao excluir a planta.");
-        console.error(e);
+      if (!eAdmin) {
+        alert("Apenas administradores (TI / AGRO) podem excluir plantas.");
+        return;
       }
-    }
-  });
+
+      if (confirm("Tem certeza de que deseja excluir esta planta?")) {
+        try {
+          const plantaAtual = plants.find((p) => p.id_planta === currentDetailId);
+
+          if (plantaAtual && plantaAtual.foto_url) {
+            await PlantService.deletarFotoStorage(plantaAtual.foto_url);
+          }
+
+          await PlantService.deletarPlanta(currentDetailId);
+
+          closeDetail();
+          fetchAndRender();
+        } catch (e) {
+          alert("Erro ao excluir a planta.");
+          console.error(e);
+        }
+      }
+    });
+  }
 
   // Inicialização
   fetchAndRender();

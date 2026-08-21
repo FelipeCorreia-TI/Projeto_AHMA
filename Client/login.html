@@ -18,7 +18,6 @@
     <link rel="manifest" href="./manifest.json" />
     <link rel="apple-touch-icon" href="./assets/icons/apple-touch-icon.png" />
 
-    <!-- Supabase será utilizado posteriormente na autenticação -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   </head>
 
@@ -38,13 +37,18 @@
             />
           </div>
 
-          <h1>Acesso à plataforma</h1>
+          <h1 id="auth-title">Acesso à plataforma</h1>
 
-          <p>
+          <p id="auth-subtitle">
             Entre para acessar a Plataforma A.H.M.A.
           </p>
 
         </header>
+
+        <div class="auth-tabs">
+          <button type="button" id="tab-login" class="auth-tab active">Entrar</button>
+          <button type="button" id="tab-cadastro" class="auth-tab">Cadastrar</button>
+        </div>
 
         <form id="login-form" class="login-form">
 
@@ -127,5 +131,6 @@
 
     </main>
 
+    <script type="module" src="src/pages/login.js"></script>
   </body>
 </html>
