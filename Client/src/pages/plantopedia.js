@@ -1,5 +1,5 @@
 import { protegerRota } from "../config/auth-guard.js";
-import { PlantService } from "../services/plantService.js";
+import { PlantService } from "../services/plant-service.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   // 🛡️ Garante autenticação e obtém a permissão baseada na coluna nivel_acesso (TI / AGRO) da tabela 'cadastro'

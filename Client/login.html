@@ -50,14 +50,11 @@
           <button type="button" id="tab-cadastro" class="auth-tab">Cadastrar</button>
         </div>
 
+        <!-- FORMULÁRIO DE LOGIN -->
         <form id="login-form" class="login-form">
 
           <div class="input-group">
-
-            <label for="email">
-              E-mail
-            </label>
-
+            <label for="email">E-mail</label>
             <input
               type="email"
               id="email"
@@ -66,17 +63,11 @@
               autocomplete="email"
               required
             />
-
           </div>
 
           <div class="input-group">
-
-            <label for="password">
-              Senha
-            </label>
-
+            <label for="password">Senha</label>
             <div class="password-input">
-
               <input
                 type="password"
                 id="password"
@@ -85,7 +76,6 @@
                 autocomplete="current-password"
                 required
               />
-
               <button
                 type="button"
                 id="toggle-password"
@@ -94,9 +84,7 @@
               >
                 👁
               </button>
-
             </div>
-
           </div>
 
           <button
@@ -109,6 +97,59 @@
 
           <p
             id="error-message"
+            class="error-message"
+            aria-live="polite"
+          ></p>
+
+        </form>
+
+        <!-- FORMULÁRIO DE CADASTRO -->
+        <form id="register-form" class="login-form" style="display: none;">
+
+          <div class="input-group">
+            <label for="reg-email">E-mail</label>
+            <input
+              type="email"
+              id="reg-email"
+              name="reg-email"
+              placeholder="seu@email.com"
+              autocomplete="email"
+              required
+            />
+          </div>
+
+          <div class="input-group">
+            <label for="reg-password">Senha</label>
+            <div class="password-input">
+              <input
+                type="password"
+                id="reg-password"
+                name="reg-password"
+                placeholder="Crie uma senha"
+                autocomplete="new-password"
+                required
+              />
+              <button
+                type="button"
+                id="toggle-reg-password"
+                class="toggle-password"
+                aria-label="Mostrar senha"
+              >
+                👁
+              </button>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            id="btn-register"
+            class="btn-login-submit"
+          >
+            Criar Conta
+          </button>
+
+          <p
+            id="reg-error-message"
             class="error-message"
             aria-live="polite"
           ></p>
