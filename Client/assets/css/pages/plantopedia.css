@@ -235,6 +235,7 @@
     color: var(--color-text-placeholder);
     cursor: pointer;
     overflow: hidden;
+    position: relative;
 }
 
 .pp-photo-upload img {

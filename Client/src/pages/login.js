@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
           throw new Error("Sua conta está inativa ou não cadastrada no sistema.");
         }
 
-        window.location.replace("plantopedia.html");
+        window.location.replace("index.html");
 
       } catch (error) {
         console.error("Erro no login:", error);
@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  // 5. SUBMISSÃO DE CADASTRO
+  // 5. SUBMISSÃO DE CADASTRO (Ajustado para usar apenas o signUp)
   if (registerForm) {
     registerForm.onsubmit = async (e) => {
       e.preventDefault();
@@ -142,26 +142,13 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       try {
-        const { data: authData, error: authError } = await _supabase.auth.signUp({
+        // A trigger do banco criará a linha na tabela 'cadastro' automaticamente
+        const { error: authError } = await _supabase.auth.signUp({
           email: regEmail,
           password: regPassword,
         });
 
         if (authError) throw authError;
-
-        if (authData.user) {
-          const { error: perfilError } = await _supabase.from("cadastro").insert([
-            {
-              id_conta: authData.user.id,
-              email: regEmail,
-              nivel_acesso: "USER",
-              data_criacao: new Date().toISOString().split("T")[0],
-              status: true,
-            },
-          ]);
-
-          if (perfilError) throw perfilError;
-        }
 
         if (regErrorMsg) {
           regErrorMsg.style.color = "green";
