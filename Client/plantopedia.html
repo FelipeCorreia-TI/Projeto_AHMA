@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Plataforma A.H.M.A</title>
+    <title>Plataforma A.H.M.A - Plantopédia</title>
     <link
       rel="shortcut icon"
       href="assets/icons/IconTransparente.ico"
@@ -17,9 +17,9 @@
   <body>
     <aside class="sidebar" id="sidebar">
       <ul class="menu-list">
-        <li><a href="index.html" class="active">Início</a></li>
+        <li><a href="index.html">Início</a></li>
         <li><a href="sensores.html">Monitoramento do Solo</a></li>
-        <li><a href="plantopedia.html">Plantopédia</a></li>
+        <li><a href="plantopedia.html" class="active">Plantopédia</a></li>
       </ul>
     </aside>
 
@@ -32,21 +32,22 @@
         </button>
 
         <div class="logo-container">
-          <a href="index.html"
-            ><img
+          <a href="index.html">
+            <img
               src="assets/images/bannerAHMA.png"
               alt="Logo A.H.M.A"
               class="banner-img"
-          /></a>
+            />
+          </a>
         </div>
 
-        <a href="index.html" id="login-content"
-          ><img
+        <a href="index.html" id="login-content">
+          <img
             id="icon-user"
             src="assets/icons/icons8-voltar-24.png"
             alt="icon-usuario"
-          />Voltar</a
-        >
+          />Voltar
+        </a>
       </header>
 
       <main id="conteudo-principal">
@@ -60,6 +61,7 @@
 
         <section class="pp-toolbar">
           <button
+            type="button"
             id="ppBtnAdd"
             class="pp-btn-add"
             title="Adicionar planta"
@@ -94,7 +96,7 @@
             <label class="pp-photo-label" for="ppPhotoInput">
               Foto da planta
               <div class="pp-photo-upload" id="ppPhotoUpload">
-                <img id="ppPhotoPreview" alt="" hidden />
+                <img id="ppPhotoPreview" alt="Prévia da foto" hidden />
                 <span id="ppPhotoPlaceholder"
                   ><br />Clique para escolher uma imagem</span
                 >
@@ -102,8 +104,8 @@
               <input type="file" id="ppPhotoInput" accept="image/*" hidden />
             </label>
 
-            <label
-              >Nome popular
+            <label>
+              Nome popular
               <input
                 type="text"
                 id="ppName"
@@ -112,8 +114,8 @@
               />
             </label>
 
-            <label
-              >Nome científico
+            <label>
+              Nome científico
               <input
                 type="text"
                 id="ppScientific"
@@ -121,8 +123,8 @@
               />
             </label>
 
-            <label
-              >Categoria
+            <label>
+              Categoria
               <select id="ppCategory">
                 <option>Hortaliça</option>
                 <option>Erva / Tempero</option>
@@ -132,8 +134,8 @@
               </select>
             </label>
 
-            <label
-              >Cuidados / Informações
+            <label>
+              Cuidados / Informações
               <textarea
                 id="ppInfo"
                 rows="4"
@@ -145,7 +147,7 @@
               <button type="button" class="pp-btn-secondary" id="ppFormCancel">
                 Cancelar
               </button>
-              <button type="submit" class="pp-btn-primary">
+              <button type="submit" class="pp-btn-primary" id="ppBtnSubmit">
                 Salvar planta
               </button>
             </div>
@@ -161,7 +163,7 @@
           </button>
           <div class="pp-detail-photo" id="ppDetailPhotoWrap">
             <img id="ppDetailImg" alt="" hidden />
-            <span id="ppDetailPlaceholder"></span>
+            <span id="ppDetailPlaceholder">🌱</span>
           </div>
           <h3 id="ppDetailName"></h3>
           <p class="pp-detail-scientific" id="ppDetailScientific"></p>
@@ -187,13 +189,11 @@
     </div>
 
     <script src="src/components/menu-hamburger.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <script src="src/config/supabase.js"></script>
-
-    <script src="src/services/plant-service.js"></script>
-
-    <script src="src/pages/plantopedia.js"></script>
+    <script type="module" src="src/pages/plantopedia.js"></script>
+    <script type="module">
+      import { protegerRota } from "./src/config/auth-guard.js";
+      protegerRota();
+    </script>
   </body>
 </html>

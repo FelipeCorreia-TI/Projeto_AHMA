@@ -1,4 +1,5 @@
 //Aqui será criado a lógica por trás do SELECT para as informações do DB
+import { _supabase } from "../config/supabase.js";
 
 const PlantService = {
   async listarPlantas() {
@@ -112,3 +113,4 @@ const PlantService = {
     }
   },
 };
+export { PlantService };

@@ -102,5 +102,11 @@
       </footer>
     </div>
     <script src="../Client/src/components/menu-hamburger.js"></script>
+    <script type="module">
+      import { protegerRota } from "./src/config/auth-guard.js";
+
+      // Executa antes de carregar a interface da página
+      protegerRota();
+    </script>
   </body>
 </html>

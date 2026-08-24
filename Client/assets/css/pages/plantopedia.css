@@ -235,6 +235,7 @@
     color: var(--color-text-placeholder);
     cursor: pointer;
     overflow: hidden;
+    position: relative;
 }
 
 .pp-photo-upload img {
@@ -326,6 +327,35 @@
     color: var(--color-text);
     margin-top: 12px;
     white-space: pre-wrap;
+}
+
+/* Ações restritas para ADM TI / ADM AGRO */
+.admin-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--color-border-light);
+}
+
+.btn-editar, .btn-excluir {
+  flex: 1;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  border: none;
+}
+
+.btn-editar {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.btn-excluir {
+  background-color: var(--color-danger);
+  color: var(--color-white);
 }
 
 @media (min-width: 768px) {
