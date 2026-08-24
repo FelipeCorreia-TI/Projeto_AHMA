@@ -1,267 +1,179 @@
-import { protegerRota } from "../config/auth-guard.js";
-import { PlantService } from "../services/plant-service.js";
+import { _supabase } from "../config/supabase.js";
 
-document.addEventListener("DOMContentLoaded", async () => {
-  // 🛡️ Garante autenticação e obtém a permissão baseada na coluna nivel_acesso (TI / AGRO) da tabela 'cadastro'
-  const dadosAutenticacao = await protegerRota();
-  if (!dadosAutenticacao) return;
+document.addEventListener("DOMContentLoaded", () => {
+  const ppGrid = document.getElementById("ppGrid");
+  const ppEmpty = document.getElementById("ppEmpty");
+  const ppSearch = document.getElementById("ppSearch");
+  const ppBtnAdd = document.getElementById("ppBtnAdd");
 
-  const { eAdmin } = dadosAutenticacao;
+  const ppFormOverlay = document.getElementById("ppFormOverlay");
+  const ppFormClose = document.getElementById("ppFormClose");
+  const ppFormCancel = document.getElementById("ppFormCancel");
+  const ppForm = document.getElementById("ppForm");
 
-  let plants = [];
-  let currentDetailId = null;
-  let pendingPhotoFile = null;
+  const ppDetailOverlay = document.getElementById("ppDetailOverlay");
+  const ppDetailClose = document.getElementById("ppDetailClose");
+  const ppDetailDelete = document.getElementById("ppDetailDelete");
 
-  // Elementos da DOM
-  const grid = document.getElementById("ppGrid");
-  const emptyState = document.getElementById("ppEmpty");
-  const searchInput = document.getElementById("ppSearch");
+  let listaPlantas = [];
+  let plantaSelecionadaId = null;
 
-  // ---- Modal: Adicionar planta ----
-  const formOverlay = document.getElementById("ppFormOverlay");
-  const form = document.getElementById("ppForm");
-  const photoUpload = document.getElementById("ppPhotoUpload");
-  const photoInput = document.getElementById("ppPhotoInput");
-  const photoPreview = document.getElementById("ppPhotoPreview");
-  const photoPlaceholder = document.getElementById("ppPhotoPlaceholder");
-
-  // ---- Modal: Detalhes ----
-  const detailOverlay = document.getElementById("ppDetailOverlay");
-  const detailImg = document.getElementById("ppDetailImg");
-  const detailPlaceholder = document.getElementById("ppDetailPlaceholder");
-  const detailName = document.getElementById("ppDetailName");
-  const detailScientific = document.getElementById("ppDetailScientific");
-  const detailCategory = document.getElementById("ppDetailCategory");
-  const detailInfo = document.getElementById("ppDetailInfo");
-  const detailDeleteBtn = document.getElementById("ppDetailDelete");
-
-  // 🔒 Botão Adicionar: Exibe apenas para ADMs (TI / AGRO)
-  const btnAdd = document.getElementById("ppBtnAdd");
-  if (btnAdd) {
-    btnAdd.style.display = eAdmin ? "flex" : "none";
-
-    btnAdd.addEventListener("click", () => {
-      if (!eAdmin) return;
-      form.reset();
-      pendingPhotoFile = null;
-      if (photoPreview) photoPreview.hidden = true;
-      if (photoPlaceholder) photoPlaceholder.hidden = false;
-      if (formOverlay) formOverlay.hidden = false;
-    });
+  // 1. MODAL CADASTRO
+  if (ppBtnAdd) {
+    ppBtnAdd.onclick = () => {
+      ppForm.reset();
+      ppFormOverlay.removeAttribute("hidden");
+    };
   }
 
-  // 🔄 Buscar e renderizar plantas
-  async function fetchAndRender() {
+  const fecharModalCadastro = () =>
+    ppFormOverlay.setAttribute("hidden", "true");
+  if (ppFormClose) ppFormClose.onclick = fecharModalCadastro;
+  if (ppFormCancel) ppFormCancel.onclick = fecharModalCadastro;
+
+  // MODAL DETALHES
+  const fecharModalDetalhes = () =>
+    ppDetailOverlay.setAttribute("hidden", "true");
+  if (ppDetailClose) ppDetailClose.onclick = fecharModalDetalhes;
+
+  // 2. BUSCA NO BANCO
+  async function carregarPlantas() {
     try {
-      plants = await PlantService.listarPlantas();
-      renderGrid();
-    } catch (e) {
-      console.error("Falha ao carregar lista de plantas:", e);
+      const { data, error } = await _supabase
+        .from("plantas")
+        .select("*")
+        .order("id", { ascending: false });
+
+      if (error) throw error;
+
+      listaPlantas = data || [];
+      renderizarPlantas(listaPlantas);
+    } catch (err) {
+      console.error("Erro ao carregar plantas:", err);
+      ppGrid.innerHTML = "";
+      ppEmpty.hidden = false;
+      ppEmpty.textContent =
+        "Nenhuma planta encontrada. Que tal adicionar a primeira?";
     }
   }
 
-  // 🎨 Desenha os cards na tela
-  function renderGrid() {
-    const term = searchInput ? searchInput.value.trim().toLowerCase() : "";
+  // 3. RENDERIZAÇÃO USANDO CARDS NATIVOS DA PLANTOPÉDIA
+  function renderizarPlantas(plantas) {
+    ppGrid.innerHTML = "";
 
-    const filtered = plants.filter(
-      (p) =>
-        p.nome_popular.toLowerCase().includes(term) ||
-        (p.nome_cientifico && p.nome_cientifico.toLowerCase().includes(term)),
-    );
+    if (!plantas || plantas.length === 0) {
+      ppEmpty.hidden = false;
+      ppEmpty.textContent =
+        "Nenhuma planta encontrada. Que tal adicionar a primeira?";
+      return;
+    }
 
-    grid.innerHTML = "";
+    ppEmpty.hidden = true;
 
-    filtered.forEach((p) => {
+    plantas.forEach((planta) => {
       const card = document.createElement("article");
       card.className = "pp-card";
 
-      const nomeCat = p.categoria_especimes?.nome_categoria || "Geral";
-
       card.innerHTML = `
         <div class="pp-card-photo">
-          ${p.foto_url ? `<img src="${p.foto_url}" alt="${p.nome_popular}">` : ""}
+          ${planta.foto_url ? `<img src="${planta.foto_url}" alt="${planta.nome}">` : "🌱"}
         </div>
         <div class="pp-card-body">
-          <span class="pp-badge">${nomeCat}</span>
-          <h4>${p.nome_popular}</h4>
-          <p><em>${p.nome_cientifico || ""}</em></p>
+          <span class="pp-badge">${planta.categoria || "Geral"}</span>
+          <h4>${planta.nome || "Sem nome"}</h4>
+          <p>${planta.nome_cientifico || ""}</p>
         </div>
       `;
 
-      card.addEventListener("click", () => openDetail(p.id_planta));
-      grid.appendChild(card);
-    });
-
-    if (emptyState) {
-      emptyState.hidden = filtered.length !== 0;
-    }
-  }
-
-  // Evento de busca em tempo real
-  if (searchInput) {
-    searchInput.addEventListener("input", renderGrid);
-  }
-
-  // ---- Modais: Fechamento ----
-  function closeForm() {
-    if (formOverlay) formOverlay.hidden = true;
-    pendingPhotoFile = null;
-  }
-
-  const btnCloseForm = document.getElementById("ppFormClose");
-  const btnCancelForm = document.getElementById("ppFormCancel");
-  if (btnCloseForm) btnCloseForm.addEventListener("click", closeForm);
-  if (btnCancelForm) btnCancelForm.addEventListener("click", closeForm);
-
-  if (formOverlay) {
-    formOverlay.addEventListener("click", (e) => {
-      if (e.target === formOverlay) closeForm();
+      card.onclick = () => abrirDetalhes(planta);
+      ppGrid.appendChild(card);
     });
   }
 
-  // ---- Manipulação do Upload de Foto ----
-  if (photoUpload && photoInput) {
-    photoUpload.addEventListener("click", () => photoInput.click());
+  // 4. PESQUISA
+  if (ppSearch) {
+    ppSearch.oninput = (e) => {
+      const termo = e.target.value.toLowerCase().trim();
+      const filtradas = listaPlantas.filter(
+        (p) =>
+          (p.nome && p.nome.toLowerCase().includes(termo)) ||
+          (p.nome_cientifico &&
+            p.nome_cientifico.toLowerCase().includes(termo)),
+      );
+      renderizarPlantas(filtradas);
+    };
   }
 
-  if (photoInput) {
-    photoInput.addEventListener("change", () => {
-      const file = photoInput.files[0];
-      if (!file) return;
+  // 5. EXIBIR DETALHES
+  function abrirDetalhes(planta) {
+    plantaSelecionadaId = planta.id;
+    document.getElementById("ppDetailName").textContent = planta.nome || "";
+    document.getElementById("ppDetailScientific").textContent =
+      planta.nome_cientifico || "";
+    document.getElementById("ppDetailCategory").textContent =
+      planta.categoria || "";
+    document.getElementById("ppDetailInfo").textContent =
+      planta.informacoes || "Sem informações adicionais.";
 
-      pendingPhotoFile = file;
-
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (photoPreview) {
-          photoPreview.src = reader.result;
-          photoPreview.hidden = false;
-        }
-        if (photoPlaceholder) {
-          photoPlaceholder.hidden = true;
-        }
-      };
-      reader.readAsDataURL(file);
-    });
+    ppDetailOverlay.removeAttribute("hidden");
   }
 
-  // ➕ Envio do Formulário (CREATE)
-  if (form) {
-    form.addEventListener("submit", async (e) => {
+  // 6. ADICIONAR PLANTA
+  if (ppForm) {
+    ppForm.onsubmit = async (e) => {
       e.preventDefault();
 
-      if (!eAdmin) {
-        alert("Apenas administradores (TI / AGRO) podem cadastrar plantas.");
-        return;
-      }
+      const nome = document.getElementById("ppName").value.trim();
+      const nome_cientifico = document
+        .getElementById("ppScientific")
+        .value.trim();
+      const categoria = document.getElementById("ppCategory").value;
+      const informacoes = document.getElementById("ppInfo").value.trim();
 
       try {
-        let fotoUrlFinal = null;
+        const { error } = await _supabase.from("plantas").insert([
+          {
+            nome,
+            nome_cientifico,
+            categoria,
+            informacoes,
+          },
+        ]);
 
-        if (pendingPhotoFile) {
-          fotoUrlFinal = await PlantService.enviarFoto(pendingPhotoFile);
-        }
+        if (error) throw error;
 
-        const novaPlanta = {
-          nome_popular: document.getElementById("ppName").value.trim(),
-          nome_cientifico: document.getElementById("ppScientific").value.trim(),
-          id_categoria: parseInt(
-            document.getElementById("ppCategory").value,
-            10,
-          ),
-          informacoes_adicionais: document
-            .getElementById("ppInfo")
-            .value.trim(),
-          foto_url: fotoUrlFinal,
-        };
-
-        if (!novaPlanta.nome_popular) return;
-
-        await PlantService.adicionaPlanta(novaPlanta);
-        closeForm();
-        fetchAndRender();
-      } catch (error) {
-        alert("Erro ao salvar a planta no banco de dados.");
-        console.error(error);
+        fecharModalCadastro();
+        await carregarPlantas();
+      } catch (err) {
+        console.error("Erro ao salvar planta:", err);
+        alert("Erro ao salvar planta: " + err.message);
       }
-    });
+    };
   }
 
-  // ---- Modal Detalhes e Exclusão (DELETE) ----
-  function openDetail(id) {
-    const p = plants.find((pl) => pl.id_planta === id);
-    if (!p) return;
-    currentDetailId = id;
+  // 7. EXCLUIR PLANTA
+  if (ppDetailDelete) {
+    ppDetailDelete.onclick = async () => {
+      if (!plantaSelecionadaId) return;
 
-    if (p.foto_url) {
-      detailImg.src = p.foto_url;
-      detailImg.hidden = false;
-      if (detailPlaceholder) detailPlaceholder.hidden = true;
-    } else {
-      detailImg.hidden = true;
-      if (detailPlaceholder) detailPlaceholder.hidden = false;
-    }
-
-    detailName.textContent = p.nome_popular;
-    detailScientific.textContent = p.nome_cientifico || "";
-    detailCategory.textContent =
-      p.categoria_especimes?.nome_categoria || "Geral";
-    detailInfo.textContent =
-      p.informacoes_adicionais || "Sem informações adicionadas ainda.";
-
-    // 🔒 Botão de Excluir: Exibe no modal apenas se for ADM
-    if (detailDeleteBtn) {
-      detailDeleteBtn.style.display = eAdmin ? "block" : "none";
-    }
-
-    detailOverlay.hidden = false;
-  }
-
-  function closeDetail() {
-    if (detailOverlay) detailOverlay.hidden = true;
-    currentDetailId = null;
-  }
-
-  const btnCloseDetail = document.getElementById("ppDetailClose");
-  if (btnCloseDetail) btnCloseDetail.addEventListener("click", closeDetail);
-
-  if (detailOverlay) {
-    detailOverlay.addEventListener("click", (e) => {
-      if (e.target === detailOverlay) closeDetail();
-    });
-  }
-
-  // 🗑️ Excluir Planta (DELETE)
-  if (detailDeleteBtn) {
-    detailDeleteBtn.addEventListener("click", async () => {
-      if (!currentDetailId) return;
-
-      if (!eAdmin) {
-        alert("Apenas administradores (TI / AGRO) podem excluir plantas.");
-        return;
-      }
-
-      if (confirm("Tem certeza de que deseja excluir esta planta?")) {
+      if (confirm("Tem certeza que deseja excluir esta planta?")) {
         try {
-          const plantaAtual = plants.find((p) => p.id_planta === currentDetailId);
+          const { error } = await _supabase
+            .from("plantas")
+            .delete()
+            .eq("id", plantaSelecionadaId);
 
-          if (plantaAtual && plantaAtual.foto_url) {
-            await PlantService.deletarFotoStorage(plantaAtual.foto_url);
-          }
+          if (error) throw error;
 
-          await PlantService.deletarPlanta(currentDetailId);
-
-          closeDetail();
-          fetchAndRender();
-        } catch (e) {
-          alert("Erro ao excluir a planta.");
-          console.error(e);
+          fecharModalDetalhes();
+          await carregarPlantas();
+        } catch (err) {
+          console.error("Erro ao excluir:", err);
+          alert("Erro ao excluir planta: " + err.message);
         }
       }
-    });
+    };
   }
 
-  // Inicialização
-  fetchAndRender();
+  carregarPlantas();
 });
