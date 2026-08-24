@@ -3,159 +3,175 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Plataforma A.H.M.A</title>
 
-    <!-- 🛡️ EXECUTA O GUARD ANTES DE RENDERIZAR QUALQUER ELEMENTO NA TELA -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script type="module">
-      import { protegerRota } from "./src/config/auth-guard.js";
-      protegerRota();
-    </script>
+    <title>Login | Plataforma A.H.M.A</title>
 
     <link
       rel="shortcut icon"
       href="assets/icons/IconTransparente.ico"
       type="image/x-icon"
     />
+
     <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/pages/login.css" />
+
     <link rel="manifest" href="./manifest.json" />
     <link rel="apple-touch-icon" href="./assets/icons/apple-touch-icon.png" />
-    <link rel="stylesheet" href="style.css" />
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   </head>
-  <body>
-    <aside class="sidebar" id="sidebar">
-      <ul class="menu-list">
-        <li><a href="#app-container" class="active">Início</a></li>
-        <li><a href="sensores.html">Monitoramento do Solo</a></li>
-        <li><a href="plantopedia.html">Plantopédia</a></li>
-        <li><a href="#sobre">Sobre</a></li>
-        <li><a href="#contato">Contato</a></li>
-      </ul>
-    </aside>
 
-    <div class="overlay" id="overlayMenu"></div>
+  <body class="login-page-body">
 
-    <div id="app-container">
-      <header class="top-header">
-        <button class="botao-sidebar" id="BtnMenu" aria-label="Abrir Menu">
-          ☰ Menu
-        </button>
+    <main class="login-container">
 
-        <div class="logo-container">
-          <a href="index.html"
-            ><img
+      <section class="login-card">
+
+        <header class="login-header">
+
+          <div class="login-logo-container">
+            <img
               src="assets/images/bannerAHMA.png"
               alt="Logo A.H.M.A"
-              class="banner-img"
-          /></a>
+              class="login-logo"
+            />
+          </div>
+
+          <h1 id="auth-title">Acesso à plataforma</h1>
+
+          <p id="auth-subtitle">
+            Entre para acessar a Plataforma A.H.M.A.
+          </p>
+
+        </header>
+
+        <div class="auth-tabs">
+          <button type="button" id="tab-login" class="auth-tab active">Entrar</button>
+          <button type="button" id="tab-cadastro" class="auth-tab">Cadastrar</button>
         </div>
 
-        <!-- 🚪 Mantido idêntico ao layout original -->
-        <a href="#" id="login-content"
-          ><img
-            id="icon-user"
-            src="assets/icons/user-icon.png"
-            alt="icon-usuario"
-          />Sair</a
-        >
-      </header>
+        <!-- FORMULÁRIO DE LOGIN -->
+        <form id="login-form" class="login-form">
 
-      <main id="conteudo-principal">
-        <section class="boxes-container">
-          <a href="sensores.html" class="feature-box">
-            <article>
-              <div class="box-header">
-                <h3>Sistema de monitoramento 💚</h3>
-                <p>
-                  Monitore você mesmo as informações em tempo real, através do
-                  nosso sistema IoT:
-                </p>
-              </div>
-              <div class="box-image">
-                <img src="assets/images/Planta 1.jpg" alt="Foto-horta" />
-              </div>
-            </article>
-          </a>
-          <a href="plantopedia.html" class="feature-box">
-            <article>
-              <div class="box-header">
-                <h3>Plantopédia 🌻</h3>
-                <p>
-                  Através da nossa enciclopédia de plantas conheça as principais
-                  espécies da nossa horta e suas peculiaridades:
-                </p>
-              </div>
-              <div class="box-image">
-                <img
-                  src="assets/images/Planta 4.jpg"
-                  alt="diversidade_plantas"
-                />
-              </div>
-            </article>
-          </a>
-        </section>
+          <div class="input-group">
+            <label for="email">E-mail</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="seu@email.com"
+              autocomplete="email"
+              required
+            />
+          </div>
 
-        <section class="box-sobre" id="sobre">
-          <article class="sobre">
-            <h2>Sobre</h2>
-            <br />
-            <p>
-              O A.H.M.A. (<em>Automatização da Horta Mello Ayres</em>) foi um
-              nome escolhido com carinho pelos desenvolvedores para representar
-              esta solução tecnológica. A aplicação visa facilitar a análise das
-              informações técnicas da horta, traduzindo-as para uma linguagem de
-              compreensão universal a partir dos dados coletados.
-            </p>
-            <br />
-            <p>
-              Para que isso aconteça, existe um fluxo contínuo de coleta,
-              tratamento, avaliação e exibição dos dados na forma de gráficos
-              intuitivos. Além do monitoramento em tempo real, a plataforma
-              disponibiliza o conhecimento detalhado das espécies e
-              peculiaridades presentes na horta.
-            </p>
-            <br />
-            <p>
-              Todo o projeto foi pensado para gerar um impacto real: mais do que
-              a entrega de um Trabalho de Conclusão de Curso (TCC),
-              desenvolvemos uma aplicação prática que resolve um problema
-              concreto, conectando a Agricultura 4.0 diretamente às exigências e
-              inovações do mercado de tecnologia.
-            </p>
-          </article>
-        </section>
-      </main>
+          <div class="input-group">
+            <label for="password">Senha</label>
+            <div class="password-input">
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Digite sua senha"
+                autocomplete="current-password"
+                required
+              />
+              <button
+                type="button"
+                id="toggle-password"
+                class="toggle-password"
+                aria-label="Mostrar senha"
+              >
+                👁
+              </button>
+            </div>
+          </div>
 
-      <footer class="row-footer" id="contato">
-        <div class="footer-content">
+          <button
+            type="submit"
+            id="btn-login"
+            class="btn-login-submit"
+          >
+            Entrar
+          </button>
+
+          <p
+            id="error-message"
+            class="error-message"
+            aria-live="polite"
+          ></p>
+
+        </form>
+
+        <!-- FORMULÁRIO DE CADASTRO -->
+        <form id="register-form" class="login-form" style="display: none;">
+
+          <div class="input-group">
+            <label for="reg-email">E-mail</label>
+            <input
+              type="email"
+              id="reg-email"
+              name="reg-email"
+              placeholder="seu@email.com"
+              autocomplete="email"
+              required
+            />
+          </div>
+
+          <div class="input-group">
+            <label for="reg-password">Senha</label>
+            <div class="password-input">
+              <input
+                type="password"
+                id="reg-password"
+                name="reg-password"
+                placeholder="Crie uma senha"
+                autocomplete="new-password"
+                required
+              />
+              <button
+                type="button"
+                id="toggle-reg-password"
+                class="toggle-password"
+                aria-label="Mostrar senha"
+              >
+                👁
+              </button>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            id="btn-register"
+            class="btn-login-submit"
+          >
+            Criar Conta
+          </button>
+
+          <p
+            id="reg-error-message"
+            class="error-message"
+            aria-live="polite"
+          ></p>
+
+        </form>
+
+        <footer class="login-footer">
+
           <p>
-            &copy; 2026 <strong>A.H.M.A</strong>. Todos os direitos reservados.
+            Plataforma A.H.M.A.
           </p>
-          <p class="devs-credits">
-            Desenvolvido por <strong>Felipe Correia</strong>,
-            <strong>Yago Montouro</strong> e <strong>Pedro Hiago</strong>.
-          </p>
-        </div>
-      </footer>
-    </div>
 
-    <script src="../Client/src/components/menu-hamburger.js"></script>
-    <script>
-      if ("serviceWorker" in navigator) {
-        window.addEventListener("load", () => {
-          navigator.serviceWorker
-            .register("./sw.js")
-            .then((reg) => console.log("Service Worker registrado!", reg.scope))
-            .catch((err) =>
-              console.error("Erro ao registrar Service Worker:", err),
-            );
-        });
-      }
-    </script>
+          <span>
+            Automatização da Horta Mello Ayres
+          </span>
 
-    <script type="module">
-      import { inicializarLogout } from "./src/services/logout.js";
-      inicializarLogout();
-    </script>
+        </footer>
+
+      </section>
+
+    </main>
+
+    <script type="module" src="src/pages/login.js"></script>
   </body>
 </html>
