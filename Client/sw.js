@@ -2,7 +2,7 @@ const CACHE_NAME = "A.H.M.A-v1";
 const ASSETS_TO_CACHE = [
   "./",
   "./index.html",
-  "./login.html",
+  "./hub.html",
   "./plantopedia.html",
   "./sensores.html",
   "./manifest.json",
