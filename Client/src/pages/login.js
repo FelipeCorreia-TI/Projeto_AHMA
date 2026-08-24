@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
           throw new Error("Sua conta está inativa ou não cadastrada no sistema.");
         }
 
-        window.location.replace("index.html");
+        window.location.replace("hub.html");
 
       } catch (error) {
         console.error("Erro no login:", error);
