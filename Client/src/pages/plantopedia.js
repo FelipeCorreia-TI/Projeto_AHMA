@@ -6,6 +6,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   const ppSearch = document.getElementById("ppSearch");
   const ppBtnAdd = document.getElementById("ppBtnAdd");
 
+  // Botão Voltar do Header
+  const btnVoltar = document.getElementById("btn-voltar");
+
   // Form e Inputs
   const ppFormOverlay = document.getElementById("ppFormOverlay");
   const ppFormClose = document.getElementById("ppFormClose");
@@ -30,7 +33,18 @@ document.addEventListener("DOMContentLoaded", async () => {
   let fotoBase64 = null;
   let nivelAcessoUsuario = "USER"; // Padrão seguro
 
-  // 1. VERIFICAR NÍVEL DE ACESSO DO USUÁRIO
+  // CONFIGURAÇÃO DO BOTÃO VOLTAR
+  if (btnVoltar) {
+    btnVoltar.addEventListener("click", (e) => {
+      e.preventDefault();
+      if (document.referrer && document.referrer.includes(window.location.host)) {
+        window.history.back();
+      } else {
+        window.location.href = "hub.html";
+      }
+    });
+  }
+
   // 1. VERIFICAR NÍVEL DE ACESSO DO USUÁRIO
   async function verificarNivelAcesso() {
     try {

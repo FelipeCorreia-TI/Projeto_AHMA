@@ -1,7 +1,5 @@
 /* ==========================================================================
-   HEADER
-   Cabeçalho fixo no topo: logo central, botão hambúrguer à esquerda
-   e link de login à direita.
+   HEADER - Ação da Direita (Sair / Voltar / Login)
    ========================================================================== */
 
 .top-header {
@@ -27,7 +25,11 @@
     object-fit: contain;
 }
 
-#login-content {
+/* Compartilha a mesma posição e alinhamento independente da página */
+#login-content,
+#btn-voltar,
+#btn-logout,
+.header-action-btn {
     justify-self: end;
     font-size: 1rem;
     color: var(--color-white);
@@ -37,6 +39,7 @@
     align-items: center;
     gap: 0.4rem;
     line-height: 1;
+    cursor: pointer;
 }
 
 #icon-user {
@@ -47,13 +50,13 @@
 
 @media (min-width: 768px) {
     .banner-img {
-        /* No original havia duas declarações conflitantes aqui
-           (max-height: 70px e depois height: 50px). Mantive só a que
-           realmente tem efeito visual (height). Ver README para detalhes. */
         height: 50px;
     }
 
-    #login-content {
+    #login-content,
+    #btn-voltar,
+    #btn-logout,
+    .header-action-btn {
         font-size: 1.1rem;
     }
 }

@@ -2,7 +2,10 @@ import { _supabase } from "./supabase.js";
 
 export async function protegerRota() {
   try {
-    const { data: { session }, error: sessionError } = await _supabase.auth.getSession();
+    const {
+      data: { session },
+      error: sessionError,
+    } = await _supabase.auth.getSession();
 
     if (sessionError || !session) {
       limparSessaoERedirecionar();
@@ -40,8 +43,15 @@ export async function protegerRota() {
 
 function limparSessaoERedirecionar() {
   sessionStorage.clear();
-  const paginaAtual = window.location.pathname.split("/").pop();
-  if (paginaAtual !== "index.html" && paginaAtual !== "") {
+
+  // Obtém o nome da página atual garantindo remoção de query params e hashs
+  const paginaAtual = window.location.pathname.split("/").pop().toLowerCase();
+
+  // Páginas públicas que não precisam de autenticação
+  const paginasPublicas = ["index.html", "login.html", ""];
+
+  // Se a página atual NÃO for uma página pública, redireciona para a tela de login (index.html)
+  if (!paginasPublicas.includes(paginaAtual)) {
     window.location.replace("index.html");
   }
 }
