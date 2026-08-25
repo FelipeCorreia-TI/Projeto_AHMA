@@ -33,6 +33,27 @@ document.addEventListener("DOMContentLoaded", async () => {
   let fotoBase64 = null;
   let nivelAcessoUsuario = "USER"; // Padrão seguro
 
+  // Duração do fechamento animado dos modais — precisa bater com
+  // a transition de .pp-modal-overlay / .pp-modal em animations.css
+  const DURACAO_FECHAR_MODAL = 320;
+
+  // ---------- Helpers genéricos de abrir/fechar modal com transição ----------
+  function abrirModal(overlay) {
+    overlay.removeAttribute("hidden");
+    // força reflow antes de adicionar a classe, senão o navegador
+    // não anima a transição (ela "já nasceria" no estado final)
+    void overlay.offsetWidth;
+    overlay.classList.add("ahma-aberto");
+  }
+
+  function fecharModal(overlay, aoFinalizar) {
+    overlay.classList.remove("ahma-aberto");
+    window.setTimeout(() => {
+      overlay.setAttribute("hidden", "true");
+      if (typeof aoFinalizar === "function") aoFinalizar();
+    }, DURACAO_FECHAR_MODAL);
+  }
+
   // CONFIGURAÇÃO DO BOTÃO VOLTAR
   if (btnVoltar) {
     btnVoltar.addEventListener("click", (e) => {
@@ -145,20 +166,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
       }
       resetarFormulario();
-      ppFormOverlay.removeAttribute("hidden");
+      abrirModal(ppFormOverlay);
     };
   }
 
   const fecharModalCadastro = () => {
-    resetarFormulario();
-    ppFormOverlay.setAttribute("hidden", "true");
+    fecharModal(ppFormOverlay, resetarFormulario);
   };
 
   if (ppFormClose) ppFormClose.onclick = fecharModalCadastro;
   if (ppFormCancel) ppFormCancel.onclick = fecharModalCadastro;
 
-  const fecharModalDetalhes = () =>
-    ppDetailOverlay.setAttribute("hidden", "true");
+  const fecharModalDetalhes = () => fecharModal(ppDetailOverlay);
   if (ppDetailClose) ppDetailClose.onclick = fecharModalDetalhes;
 
   // 5. CARREGAR PLANTAS
@@ -192,7 +211,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  // 6. RENDERIZAR CARDS
+  // 6. RENDERIZAR CARDS (com índice para animação em cascata)
   function renderizarPlantas(plantas) {
     ppGrid.innerHTML = "";
 
@@ -203,9 +222,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     ppEmpty.hidden = true;
 
-    plantas.forEach((planta) => {
+    plantas.forEach((planta, indice) => {
       const card = document.createElement("article");
       card.className = "pp-card";
+      // usado pelo CSS (animation-delay: calc(var(--i) * 45ms)) para
+      // escalonar a entrada dos cards, sem depender de nth-child
+      card.style.setProperty("--i", indice);
 
       const fotoHtml = planta.foto_url
         ? `<img src="${planta.foto_url}" alt="${planta.nome_popular}">`
@@ -278,7 +300,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     }
 
-    ppDetailOverlay.removeAttribute("hidden");
+    abrirModal(ppDetailOverlay);
   }
 
   // 9. SALVAR PLANTA
@@ -310,6 +332,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (ppBtnSubmit) {
         ppBtnSubmit.disabled = true;
         ppBtnSubmit.textContent = "Salvando...";
+        ppBtnSubmit.classList.add("ahma-carregando");
       }
 
       try {
@@ -334,6 +357,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (ppBtnSubmit) {
           ppBtnSubmit.disabled = false;
           ppBtnSubmit.textContent = "Salvar planta";
+          ppBtnSubmit.classList.remove("ahma-carregando");
         }
       }
     };
