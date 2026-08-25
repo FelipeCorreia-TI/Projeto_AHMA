@@ -75,10 +75,11 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       try {
-        const { data: authData, error: authError } = await _supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
+        const { data: authData, error: authError } =
+          await _supabase.auth.signInWithPassword({
+            email,
+            password,
+          });
 
         if (authError) throw new Error("E-mail ou senha incorretos.");
 
@@ -88,13 +89,18 @@ document.addEventListener("DOMContentLoaded", () => {
           .eq("id_conta", authData.user.id)
           .maybeSingle();
 
-        if (cadastroError || !usuarioCadastro || usuarioCadastro.status === false) {
+        if (
+          cadastroError ||
+          !usuarioCadastro ||
+          usuarioCadastro.status === false
+        ) {
           await _supabase.auth.signOut();
-          throw new Error("Sua conta está inativa ou não cadastrada no sistema.");
+          throw new Error(
+            "Sua conta está inativa ou não cadastrada no sistema.",
+          );
         }
 
         window.location.replace("hub.html");
-
       } catch (error) {
         console.error("Erro no login:", error);
         if (errorMessage) {
@@ -110,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  // 5. SUBMISSÃO DE CADASTRO (Ajustado para usar apenas o signUp)
+  // 5. SUBMISSÃO DE CADASTRO 
   if (registerForm) {
     registerForm.onsubmit = async (e) => {
       e.preventDefault();
@@ -123,17 +129,36 @@ document.addEventListener("DOMContentLoaded", () => {
       const regEmail = regEmailInput ? regEmailInput.value.trim() : "";
       const regPassword = regPasswordInput ? regPasswordInput.value : "";
 
-      if (!regEmail || !regPassword) {
-        if (regErrorMsg) {
-          regErrorMsg.textContent = "Preencha o e-mail e a senha.";
-          regErrorMsg.style.display = "block";
-        }
-        return;
-      }
-
+      // Reset de mensagens de erro
       if (regErrorMsg) {
         regErrorMsg.textContent = "";
         regErrorMsg.style.display = "none";
+        regErrorMsg.style.color = "red";
+      }
+
+      // --- VALIDAÇÕES DE LIMITE E REGRAS DE SENHA ---
+      if (!regEmail || !regPassword) {
+        exibirErroCadastro("Preencha todos os campos obrigatórios.");
+        return;
+      }
+
+      // Limite mínimo
+      if (regPassword.length < 6) {
+        exibirErroCadastro("A senha deve ter no mínimo 6 caracteres.");
+        return;
+      }
+
+      // Limite máximo
+      if (regPassword.length > 20) {
+        exibirErroCadastro("A senha deve ter no máximo 20 caracteres.");
+        return;
+      }
+
+      // (Opcional) Regra extra: Exigir ao menos um número
+      const temNumero = /\d/.test(regPassword);
+      if (!temNumero) {
+        exibirErroCadastro("A senha deve conter pelo menos um número.");
+        return;
       }
 
       if (btnRegister) {
@@ -142,13 +167,21 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       try {
-        // A trigger do banco criará a linha na tabela 'cadastro' automaticamente
-        const { error: authError } = await _supabase.auth.signUp({
+        const { data, error: authError } = await _supabase.auth.signUp({
           email: regEmail,
           password: regPassword,
         });
 
         if (authError) throw authError;
+
+        // Trata usuário já existente quando o Supabase não lança erro explícito
+        if (
+          data?.user &&
+          data.user.identities &&
+          data.user.identities.length === 0
+        ) {
+          throw new Error("User already registered");
+        }
 
         if (regErrorMsg) {
           regErrorMsg.style.color = "green";
@@ -156,14 +189,27 @@ document.addEventListener("DOMContentLoaded", () => {
           regErrorMsg.style.display = "block";
         }
 
-        if (tabLogin) tabLogin.click();
-
+        setTimeout(() => {
+          if (tabLogin) tabLogin.click();
+        }, 2000);
       } catch (err) {
         console.error("Erro no cadastro:", err);
-        if (regErrorMsg) {
-          regErrorMsg.style.color = "";
-          regErrorMsg.textContent = err.message || "Erro ao criar conta.";
-          regErrorMsg.style.display = "block";
+
+        let msg = err.message || "";
+        if (
+          msg.includes("User already registered") ||
+          msg.includes("already exists") ||
+          (err.status === 400 && msg.includes("already"))
+        ) {
+          exibirErroCadastro(
+            "Este e-mail já está cadastrado. Faça login ou use outro e-mail.",
+          );
+        } else if (msg.includes("Password should be at least")) {
+          exibirErroCadastro("A senha deve conter pelo menos 6 caracteres.");
+        } else {
+          exibirErroCadastro(
+            "Ocorreu um erro ao criar a conta. Tente novamente.",
+          );
         }
       } finally {
         if (btnRegister) {
@@ -172,5 +218,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
     };
+  }
+
+  // Função auxiliar para exibir os erros de cadastro
+  function exibirErroCadastro(mensagem) {
+    const regErrorMsg = document.getElementById("reg-error-message");
+    if (regErrorMsg) {
+      regErrorMsg.style.color = "red";
+      regErrorMsg.textContent = mensagem;
+      regErrorMsg.style.display = "block";
+    }
   }
 });
