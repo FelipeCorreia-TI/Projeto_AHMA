@@ -4,6 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Plataforma A.H.M.A - Plantopédia</title>
+
+    <!-- 🛡️ Proteção de rota no topo do HEAD -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module">
+      import { protegerRota } from "./src/config/auth-guard.js";
+      protegerRota();
+    </script>
+
     <link
       rel="shortcut icon"
       href="assets/icons/IconTransparente.ico"
@@ -17,7 +25,7 @@
   <body>
     <aside class="sidebar" id="sidebar">
       <ul class="menu-list">
-        <li><a href="index.html">Início</a></li>
+        <li><a href="hub.html">Início</a></li>
         <li><a href="sensores.html">Monitoramento do Solo</a></li>
         <li><a href="plantopedia.html" class="active">Plantopédia</a></li>
       </ul>
@@ -32,7 +40,7 @@
         </button>
 
         <div class="logo-container">
-          <a href="index.html">
+          <a href="hub.html">
             <img
               src="assets/images/bannerAHMA.png"
               alt="Logo A.H.M.A"
@@ -41,12 +49,13 @@
           </a>
         </div>
 
-        <a href="index.html" id="login-content">
+        <a href="javascript:void(0)" id="btn-voltar">
           <img
             id="icon-user"
             src="assets/icons/icons8-voltar-24.png"
-            alt="icon-usuario"
-          />Voltar
+            alt="icon-voltar"
+          />
+          Voltar
         </a>
       </header>
 
@@ -189,11 +198,6 @@
     </div>
 
     <script src="src/components/menu-hamburger.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script type="module" src="src/pages/plantopedia.js"></script>
-    <script type="module">
-      import { protegerRota } from "./src/config/auth-guard.js";
-      protegerRota();
-    </script>
   </body>
 </html>
