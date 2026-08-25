@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   let listaPlantas = [];
   let listaCategorias = [];
   let plantaSelecionadaId = null;
-  let fotoBase64 = null;
+  let arquivoSelecionado = null; // Armazena o arquivo File para o upload
   let nivelAcessoUsuario = "USER"; // Padrão seguro
 
   // CONFIGURAÇÃO DO BOTÃO VOLTAR
@@ -108,16 +108,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  // 3. PREVIEW DA FOTO
+  // 3. PREVIEW DA FOTO E ARMAZENAMENTO DO ARQUIVO
   if (ppPhotoInput) {
     ppPhotoInput.onchange = (e) => {
       const file = e.target.files[0];
-      if (!file) return;
+      if (!file) {
+        arquivoSelecionado = null;
+        return;
+      }
+
+      arquivoSelecionado = file; // Guarda a referência do File para upload futuro
 
       const reader = new FileReader();
       reader.onload = (event) => {
-        fotoBase64 = event.target.result;
-        ppPhotoPreview.src = fotoBase64;
+        ppPhotoPreview.src = event.target.result;
         ppPhotoPreview.removeAttribute("hidden");
         if (ppPhotoPlaceholder) ppPhotoPlaceholder.style.display = "none";
       };
@@ -127,7 +131,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function resetarFormulario() {
     ppForm.reset();
-    fotoBase64 = null;
+    arquivoSelecionado = null;
     if (ppPhotoPreview) {
       ppPhotoPreview.src = "";
       ppPhotoPreview.setAttribute("hidden", "true");
@@ -281,7 +285,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     ppDetailOverlay.removeAttribute("hidden");
   }
 
-  // 9. SALVAR PLANTA
+  // 9. SALVAR PLANTA COM UPLOAD PARA O STORAGE
   if (ppForm) {
     ppForm.onsubmit = async (e) => {
       e.preventDefault();
@@ -313,12 +317,39 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
 
       try {
+        let urlFotoStorage = null;
+
+        // Se houver um arquivo de imagem selecionado, faz o upload para o Storage
+        if (arquivoSelecionado) {
+          const extensao = arquivoSelecionado.name.split(".").pop();
+          const nomeArquivo = `${Date.now()}_${Math.random().toString(36).substring(2, 8)}.${extensao}`;
+
+          const { data: uploadData, error: uploadError } =
+            await _supabase.storage
+              .from("plantas-fotos")
+              .upload(nomeArquivo, arquivoSelecionado, {
+                cacheControl: "3600",
+                upsert: false,
+              });
+
+          if (uploadError) {
+            throw new Error(`Erro ao enviar foto: ${uploadError.message}`);
+          }
+
+          // Obtém a URL pública da foto salva no bucket
+          const { data: urlData } = _supabase.storage
+            .from("plantas-fotos")
+            .getPublicUrl(nomeArquivo);
+
+          urlFotoStorage = urlData.publicUrl;
+        }
+
         const payload = {
           nome_popular,
           nome_cientifico: nome_cientifico || null,
           id_categoria,
           informacoes_adicionais: informacoes_adicionais || null,
-          foto_url: fotoBase64 || null,
+          foto_url: urlFotoStorage,
         };
 
         const { error } = await _supabase.from("especimes").insert([payload]);
@@ -329,7 +360,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         await carregarPlantas();
       } catch (err) {
         console.error("Erro ao salvar planta:", err);
-        alert("Erro ao salvar planta no banco: " + err.message);
+        alert("Erro ao salvar planta: " + err.message);
       } finally {
         if (ppBtnSubmit) {
           ppBtnSubmit.disabled = false;
