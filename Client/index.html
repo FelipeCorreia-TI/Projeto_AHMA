@@ -22,13 +22,9 @@
   </head>
 
   <body class="login-page-body">
-
     <main class="login-container">
-
       <section class="login-card">
-
         <header class="login-header">
-
           <div class="login-logo-container">
             <img
               src="assets/images/bannerAHMA.png"
@@ -39,20 +35,20 @@
 
           <h1 id="auth-title">Acesso à plataforma</h1>
 
-          <p id="auth-subtitle">
-            Entre para acessar a Plataforma A.H.M.A.
-          </p>
-
+          <p id="auth-subtitle">Entre para acessar a Plataforma A.H.M.A.</p>
         </header>
 
         <div class="auth-tabs">
-          <button type="button" id="tab-login" class="auth-tab active">Entrar</button>
-          <button type="button" id="tab-cadastro" class="auth-tab">Cadastrar</button>
+          <button type="button" id="tab-login" class="auth-tab active">
+            Entrar
+          </button>
+          <button type="button" id="tab-cadastro" class="auth-tab">
+            Cadastrar
+          </button>
         </div>
 
         <!-- FORMULÁRIO DE LOGIN -->
         <form id="login-form" class="login-form">
-
           <div class="input-group">
             <label for="email">E-mail</label>
             <input
@@ -72,8 +68,10 @@
                 type="password"
                 id="password"
                 name="password"
-                placeholder="Digite sua senha"
+                placeholder="6 a 20 caracteres"
                 autocomplete="current-password"
+                minlength="6"
+                maxlength="20"
                 required
               />
               <button
@@ -87,25 +85,15 @@
             </div>
           </div>
 
-          <button
-            type="submit"
-            id="btn-login"
-            class="btn-login-submit"
-          >
+          <button type="submit" id="btn-login" class="btn-login-submit">
             Entrar
           </button>
 
-          <p
-            id="error-message"
-            class="error-message"
-            aria-live="polite"
-          ></p>
-
+          <p id="error-message" class="error-message" aria-live="polite"></p>
         </form>
 
         <!-- FORMULÁRIO DE CADASTRO -->
-        <form id="register-form" class="login-form" style="display: none;">
-
+        <form id="register-form" class="login-form" style="display: none">
           <div class="input-group">
             <label for="reg-email">E-mail</label>
             <input
@@ -125,8 +113,10 @@
                 type="password"
                 id="reg-password"
                 name="reg-password"
-                placeholder="Crie uma senha"
+                placeholder="6 a 20 caracteres"
                 autocomplete="new-password"
+                minlength="6"
+                maxlength="20"
                 required
               />
               <button
@@ -138,13 +128,19 @@
                 👁
               </button>
             </div>
+            <small
+              style="
+                display: block;
+                margin-top: 4px;
+                color: #666;
+                font-size: 0.8rem;
+              "
+            >
+              A senha deve conter entre 6 e 20 caracteres e pelo menos 1 número.
+            </small>
           </div>
 
-          <button
-            type="submit"
-            id="btn-register"
-            class="btn-login-submit"
-          >
+          <button type="submit" id="btn-register" class="btn-login-submit">
             Criar Conta
           </button>
 
@@ -153,23 +149,14 @@
             class="error-message"
             aria-live="polite"
           ></p>
-
         </form>
 
         <footer class="login-footer">
+          <p>Plataforma A.H.M.A.</p>
 
-          <p>
-            Plataforma A.H.M.A.
-          </p>
-
-          <span>
-            Automatização da Horta Mello Ayres
-          </span>
-
+          <span> Automatização da Horta Mello Ayres </span>
         </footer>
-
       </section>
-
     </main>
 
     <script type="module" src="src/pages/login.js"></script>
