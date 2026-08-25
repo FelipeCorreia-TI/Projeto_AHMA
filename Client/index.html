@@ -68,8 +68,10 @@
                 type="password"
                 id="password"
                 name="password"
-                placeholder="Digite sua senha"
+                placeholder="6 a 20 caracteres"
                 autocomplete="current-password"
+                minlength="6"
+                maxlength="20"
                 required
               />
               <button
@@ -107,7 +109,6 @@
           <div class="input-group">
             <label for="reg-password">Senha</label>
             <div class="password-input">
-              <!-- Adicionados os atributos minlength e maxlength -->
               <input
                 type="password"
                 id="reg-password"
@@ -127,7 +128,6 @@
                 👁
               </button>
             </div>
-            <!-- Dica visual do limite de senha -->
             <small
               style="
                 display: block;
