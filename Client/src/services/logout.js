@@ -17,8 +17,8 @@ export function inicializarLogout() {
         } finally {
           localStorage.clear();
           sessionStorage.clear();
-          // window.location.replace remove a página do histórico, impedindo que o botão 'Voltar' exiba o HUB
-          window.location.replace("login.html");
+          // Redireciona para o login substituindo o histórico
+          window.location.replace("index.html");
         }
       }
     });

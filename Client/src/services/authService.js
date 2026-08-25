@@ -48,7 +48,7 @@ export const AuthService = {
   async logout() {
     await supabase.auth.signOut();
     localStorage.removeItem("usuario_ahma");
-    window.location.href = "login.html";
+    window.location.href = "index.html";
   },
 
   /**
