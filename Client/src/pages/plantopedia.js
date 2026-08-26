@@ -30,10 +30,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   let listaPlantas = [];
   let listaCategorias = [];
   let plantaSelecionadaId = null;
-  let arquivoSelecionado = null; 
-  let nivelAcessoUsuario = "USER"; 
+  let arquivoSelecionado = null; // Armazena o arquivo File para o upload
+  let nivelAcessoUsuario = "USER"; // Padrão seguro
 
+<<<<<<< HEAD
+  // CONFIGURAÇÃO DO BOTÃO VOLTAR
+=======
 
+>>>>>>> aab924435f5486f418335d553dd1154d51a1bcca
   if (btnVoltar) {
     btnVoltar.addEventListener("click", (e) => {
       e.preventDefault();
@@ -45,7 +49,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // 1. VERIFICAR NÍVEL DE ACESSO
+  // 1. VERIFICAR NÍVEL DE ACESSO DO USUÁRIO
   async function verificarNivelAcesso() {
     try {
       const {
@@ -65,11 +69,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         nivelAcessoUsuario = String(data.nivel_acesso).trim().toUpperCase();
       }
 
-      const isAdmin = nivelAcessoUsuario === "TI" || nivelAcessoUsuario === "AGRO";
+      // Permite acesso de edição para TI e AGRO
+      const isAdmin =
+        nivelAcessoUsuario === "TI" || nivelAcessoUsuario === "AGRO";
 
       if (ppBtnAdd) {
         if (isAdmin) {
-          ppBtnAdd.style.display = "";
+          ppBtnAdd.style.display = ""; // Restaura a exibição padrão do CSS sem quebrar a tela
           ppBtnAdd.removeAttribute("hidden");
         } else {
           ppBtnAdd.style.display = "none";
@@ -80,7 +86,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  // 2. CARREGAR CATEGORIAS
+  // 2. CARREGAR CATEGORIAS NO SELECT
   async function carregarCategorias() {
     try {
       const { data, error } = await _supabase
@@ -106,7 +112,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  // 3. CAPTURA DO ARQUIVO DE FOTO
+  // 3. PREVIEW DA FOTO E ARMAZENAMENTO DO ARQUIVO
   if (ppPhotoInput) {
     ppPhotoInput.onchange = (e) => {
       const file = e.target.files[0];
@@ -115,7 +121,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
       }
 
-      arquivoSelecionado = file;
+      arquivoSelecionado = file; // Guarda a referência do File para upload futuro
 
       const reader = new FileReader();
       reader.onload = (event) => {
@@ -139,7 +145,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  // 4. MODAIS
+  // 4. CONTROLE DOS MODAIS
   if (ppBtnAdd) {
     ppBtnAdd.onclick = () => {
       if (nivelAcessoUsuario === "USER") {
@@ -158,8 +164,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (ppFormClose) ppFormClose.onclick = fecharModalCadastro;
   if (ppFormCancel) ppFormCancel.onclick = fecharModalCadastro;
 
+<<<<<<< HEAD
+  const fecharModalDetalhes = () =>
+    ppDetailOverlay.setAttribute("hidden", "true");
+=======
   const fecharModalDetalhes = () => fecharModal(ppDetailOverlay);
 
+>>>>>>> aab924435f5486f418335d553dd1154d51a1bcca
   if (ppDetailClose) ppDetailClose.onclick = fecharModalDetalhes;
 
   // 5. CARREGAR PLANTAS
@@ -176,7 +187,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           foto_url,
           id_categoria,
           categoria_especimes ( nome_categoria )
-        `
+        `,
         )
         .order("id_planta", { ascending: false });
 
@@ -188,7 +199,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.error("Erro ao carregar plantas:", err);
       ppGrid.innerHTML = "";
       ppEmpty.hidden = false;
-      ppEmpty.textContent = "Nenhuma planta encontrada. Que tal adicionar a primeira?";
+      ppEmpty.textContent =
+        "Nenhuma planta encontrada. Que tal adicionar a primeira?";
     }
   }
 
@@ -214,7 +226,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         ? `<img src="${planta.foto_url}" alt="${planta.nome_popular}">`
         : "🌱";
 
-      const nomeCategoria = planta.categoria_especimes?.nome_categoria || "Geral";
+      const nomeCategoria =
+        planta.categoria_especimes?.nome_categoria || "Geral";
 
       card.innerHTML = `
         <div class="pp-card-photo">
@@ -239,17 +252,20 @@ document.addEventListener("DOMContentLoaded", async () => {
       const filtradas = listaPlantas.filter(
         (p) =>
           (p.nome_popular && p.nome_popular.toLowerCase().includes(termo)) ||
-          (p.nome_cientifico && p.nome_cientifico.toLowerCase().includes(termo))
+          (p.nome_cientifico &&
+            p.nome_cientifico.toLowerCase().includes(termo)),
       );
       renderizarPlantas(filtradas);
     };
   }
 
-  // 8. DETALHES
+  // 8. EXIBIR DETALHES E TRATAR VISIBILIDADE DE BOTÕES RESTREITOS
   function abrirDetalhes(planta) {
     plantaSelecionadaId = planta.id_planta;
-    document.getElementById("ppDetailName").textContent = planta.nome_popular || "";
-    document.getElementById("ppDetailScientific").textContent = planta.nome_cientifico || "";
+    document.getElementById("ppDetailName").textContent =
+      planta.nome_popular || "";
+    document.getElementById("ppDetailScientific").textContent =
+      planta.nome_cientifico || "";
     document.getElementById("ppDetailCategory").textContent =
       planta.categoria_especimes?.nome_categoria || "Geral";
     document.getElementById("ppDetailInfo").textContent =
@@ -268,6 +284,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (placeholderDetail) placeholderDetail.hidden = false;
     }
 
+    // Oculta/Exibe o botão de exclusão com base na permissão
     if (ppDetailDelete) {
       if (nivelAcessoUsuario === "USER") {
         ppDetailDelete.style.display = "none";
@@ -279,7 +296,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     abrirModal(ppDetailOverlay);
   }
 
-  // 9. SALVAR PLANTA (UPLOAD + INSERT)
+  // 9. SALVAR PLANTA COM UPLOAD PARA O STORAGE
   if (ppForm) {
     ppForm.onsubmit = async (e) => {
       e.preventDefault();
@@ -290,9 +307,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
 
       const nome_popular = document.getElementById("ppName").value.trim();
-      const nome_cientifico = document.getElementById("ppScientific").value.trim();
-      const id_categoria = ppCategorySelect ? parseInt(ppCategorySelect.value) : null;
-      const informacoes_adicionais = document.getElementById("ppInfo").value.trim();
+      const nome_cientifico = document
+        .getElementById("ppScientific")
+        .value.trim();
+      const id_categoria = ppCategorySelect
+        ? parseInt(ppCategorySelect.value)
+        : null;
+      const informacoes_adicionais = document
+        .getElementById("ppInfo")
+        .value.trim();
 
       if (!nome_popular) {
         alert("Por favor, preencha o nome popular da planta.");
@@ -308,23 +331,24 @@ document.addEventListener("DOMContentLoaded", async () => {
       try {
         let urlFotoStorage = null;
 
+        // Se houver um arquivo de imagem selecionado, faz o upload para o Storage
         if (arquivoSelecionado) {
           const extensao = arquivoSelecionado.name.split(".").pop();
-          const nomeArquivo = `${Date.now()}_${Math.random().toString(36).substring(2, 7)}.${extensao}`;
+          const nomeArquivo = `${Date.now()}_${Math.random().toString(36).substring(2, 8)}.${extensao}`;
 
-          // Upload no storage
-          const { error: uploadError } = await _supabase.storage
-            .from("plantas-fotos")
-            .upload(nomeArquivo, arquivoSelecionado, {
-              cacheControl: "3600",
-              upsert: false,
-            });
+          const { data: uploadData, error: uploadError } =
+            await _supabase.storage
+              .from("plantas-fotos")
+              .upload(nomeArquivo, arquivoSelecionado, {
+                cacheControl: "3600",
+                upsert: false,
+              });
 
           if (uploadError) {
-            throw new Error(`Erro ao enviar imagem: ${uploadError.message}`);
+            throw new Error(`Erro ao enviar foto: ${uploadError.message}`);
           }
 
-          // Pegar URL pública
+          // Obtém a URL pública da foto salva no bucket
           const { data: urlData } = _supabase.storage
             .from("plantas-fotos")
             .getPublicUrl(nomeArquivo);
@@ -340,17 +364,15 @@ document.addEventListener("DOMContentLoaded", async () => {
           foto_url: urlFotoStorage,
         };
 
-        const { error: insertError } = await _supabase
-          .from("especimes")
-          .insert([payload]);
+        const { error } = await _supabase.from("especimes").insert([payload]);
 
-        if (insertError) throw insertError;
+        if (error) throw error;
 
         fecharModalCadastro();
         await carregarPlantas();
       } catch (err) {
         console.error("Erro ao salvar planta:", err);
-        alert("Erro ao salvar: " + err.message);
+        alert("Erro ao salvar planta: " + err.message);
       } finally {
         if (ppBtnSubmit) {
           ppBtnSubmit.disabled = false;
@@ -361,7 +383,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
   }
 
-  // 10. EXCLUIR PLANTA (STORAGE + DELETE BANCO)
+  // 10. EXCLUIR PLANTA
   if (ppDetailDelete) {
     ppDetailDelete.onclick = async () => {
       if (nivelAcessoUsuario === "USER") {
@@ -373,51 +395,24 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       if (confirm("Tem certeza que deseja excluir esta planta?")) {
         try {
-          const plantaParaExcluir = listaPlantas.find(
-            (p) => p.id_planta === plantaSelecionadaId
-          );
-
-          // 1. Apaga a foto do Storage (se existir)
-          if (plantaParaExcluir && plantaParaExcluir.foto_url) {
-            try {
-              // Isola o nome do arquivo da URL (ex: 17123456_abc.jpg)
-              const urlLimpa = plantaParaExcluir.foto_url.split("?")[0];
-              const partes = urlLimpa.split("/");
-              const nomeArquivo = partes[partes.length - 1];
-
-              if (nomeArquivo) {
-                const { error: storageErr } = await _supabase.storage
-                  .from("plantas-fotos")
-                  .remove([nomeArquivo]);
-
-                if (storageErr) {
-                  console.warn("Aviso ao remover arquivo do Storage:", storageErr.message);
-                }
-              }
-            } catch (errStorage) {
-              console.warn("Falha ao extrair nome da foto:", errStorage);
-            }
-          }
-
-          // 2. Deleta o registro do banco de dados
-          const { error: dbError } = await _supabase
+          const { error } = await _supabase
             .from("especimes")
             .delete()
             .eq("id_planta", plantaSelecionadaId);
 
-          if (dbError) throw dbError;
+          if (error) throw error;
 
           fecharModalDetalhes();
           await carregarPlantas();
         } catch (err) {
-          console.error("Erro ao excluir planta:", err);
-          alert("Erro ao excluir: " + err.message);
+          console.error("Erro ao excluir:", err);
+          alert("Erro ao excluir planta: " + err.message);
         }
       }
     };
   }
 
-  // Inicialização
+  // Inicialização encadeada
   await verificarNivelAcesso();
   await carregarCategorias();
   await carregarPlantas();
