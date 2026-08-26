@@ -30,14 +30,31 @@ document.addEventListener("DOMContentLoaded", async () => {
   let listaPlantas = [];
   let listaCategorias = [];
   let plantaSelecionadaId = null;
-  let arquivoSelecionado = null; // Armazena o arquivo File para o upload
+  let fotoBase64 = null;
   let nivelAcessoUsuario = "USER"; // Padrão seguro
 
-<<<<<<< HEAD
-  // CONFIGURAÇÃO DO BOTÃO VOLTAR
-=======
+  // Duração do fechamento animado dos modais — precisa bater com
+  // a transition de .pp-modal-overlay / .pp-modal em animations.css
+  const DURACAO_FECHAR_MODAL = 320;
 
->>>>>>> aab924435f5486f418335d553dd1154d51a1bcca
+  // ---------- Helpers genéricos de abrir/fechar modal com transição ----------
+  function abrirModal(overlay) {
+    overlay.removeAttribute("hidden");
+    // força reflow antes de adicionar a classe, senão o navegador
+    // não anima a transição (ela "já nasceria" no estado final)
+    void overlay.offsetWidth;
+    overlay.classList.add("ahma-aberto");
+  }
+
+  function fecharModal(overlay, aoFinalizar) {
+    overlay.classList.remove("ahma-aberto");
+    window.setTimeout(() => {
+      overlay.setAttribute("hidden", "true");
+      if (typeof aoFinalizar === "function") aoFinalizar();
+    }, DURACAO_FECHAR_MODAL);
+  }
+
+  // CONFIGURAÇÃO DO BOTÃO VOLTAR
   if (btnVoltar) {
     btnVoltar.addEventListener("click", (e) => {
       e.preventDefault();
@@ -112,20 +129,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  // 3. PREVIEW DA FOTO E ARMAZENAMENTO DO ARQUIVO
+  // 3. PREVIEW DA FOTO
   if (ppPhotoInput) {
     ppPhotoInput.onchange = (e) => {
       const file = e.target.files[0];
-      if (!file) {
-        arquivoSelecionado = null;
-        return;
-      }
-
-      arquivoSelecionado = file; // Guarda a referência do File para upload futuro
+      if (!file) return;
 
       const reader = new FileReader();
       reader.onload = (event) => {
-        ppPhotoPreview.src = event.target.result;
+        fotoBase64 = event.target.result;
+        ppPhotoPreview.src = fotoBase64;
         ppPhotoPreview.removeAttribute("hidden");
         if (ppPhotoPlaceholder) ppPhotoPlaceholder.style.display = "none";
       };
@@ -135,7 +148,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function resetarFormulario() {
     ppForm.reset();
-    arquivoSelecionado = null;
+    fotoBase64 = null;
     if (ppPhotoPreview) {
       ppPhotoPreview.src = "";
       ppPhotoPreview.setAttribute("hidden", "true");
@@ -164,13 +177,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (ppFormClose) ppFormClose.onclick = fecharModalCadastro;
   if (ppFormCancel) ppFormCancel.onclick = fecharModalCadastro;
 
-<<<<<<< HEAD
-  const fecharModalDetalhes = () =>
-    ppDetailOverlay.setAttribute("hidden", "true");
-=======
   const fecharModalDetalhes = () => fecharModal(ppDetailOverlay);
-
->>>>>>> aab924435f5486f418335d553dd1154d51a1bcca
   if (ppDetailClose) ppDetailClose.onclick = fecharModalDetalhes;
 
   // 5. CARREGAR PLANTAS
@@ -296,7 +303,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     abrirModal(ppDetailOverlay);
   }
 
-  // 9. SALVAR PLANTA COM UPLOAD PARA O STORAGE
+  // 9. SALVAR PLANTA
   if (ppForm) {
     ppForm.onsubmit = async (e) => {
       e.preventDefault();
@@ -329,39 +336,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
 
       try {
-        let urlFotoStorage = null;
-
-        // Se houver um arquivo de imagem selecionado, faz o upload para o Storage
-        if (arquivoSelecionado) {
-          const extensao = arquivoSelecionado.name.split(".").pop();
-          const nomeArquivo = `${Date.now()}_${Math.random().toString(36).substring(2, 8)}.${extensao}`;
-
-          const { data: uploadData, error: uploadError } =
-            await _supabase.storage
-              .from("plantas-fotos")
-              .upload(nomeArquivo, arquivoSelecionado, {
-                cacheControl: "3600",
-                upsert: false,
-              });
-
-          if (uploadError) {
-            throw new Error(`Erro ao enviar foto: ${uploadError.message}`);
-          }
-
-          // Obtém a URL pública da foto salva no bucket
-          const { data: urlData } = _supabase.storage
-            .from("plantas-fotos")
-            .getPublicUrl(nomeArquivo);
-
-          urlFotoStorage = urlData.publicUrl;
-        }
-
         const payload = {
           nome_popular,
           nome_cientifico: nome_cientifico || null,
           id_categoria,
           informacoes_adicionais: informacoes_adicionais || null,
-          foto_url: urlFotoStorage,
+          foto_url: fotoBase64 || null,
         };
 
         const { error } = await _supabase.from("especimes").insert([payload]);
@@ -372,7 +352,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         await carregarPlantas();
       } catch (err) {
         console.error("Erro ao salvar planta:", err);
-        alert("Erro ao salvar planta: " + err.message);
+        alert("Erro ao salvar planta no banco: " + err.message);
       } finally {
         if (ppBtnSubmit) {
           ppBtnSubmit.disabled = false;
