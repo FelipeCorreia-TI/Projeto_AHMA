@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Plataforma A.H.M.A</title>
+
+    <!-- 🛡️ EXECUTA O GUARD ANTES DE RENDERIZAR QUALQUER ELEMENTO NA TELA -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module">
+      import { protegerRota } from "./src/config/auth-guard.js";
+      protegerRota();
+    </script>
+
+    <title>Hub de Navegação | A.H.M.A</title>
+    <meta
+      name="description"
+      content="Acesse as funcionalidades da Plataforma A.H.M.A: monitoramento de solo por sensores IoT e catálogo da Plantopédia da Horta Mello Ayres."
+    />
+    <meta name="robots" content="index, follow" />
+    <link
+      rel="canonical"
+      href="https://felipecorreia-ti.github.io/Projeto_AHMA/Client/hub.html"
+    />
+
+   
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Hub de Navegação — Projeto A.H.M.A" />
+    <meta
+      property="og:description"
+      content="Painel principal de acesso ao monitoramento IoT e à enciclopédia botânica da Horta Mello Ayres."
+    />
+    <meta
+      property="og:image"
+      content="https://felipecorreia-ti.github.io/Projeto_AHMA/Client/assets/images/bannerAHMA.png"
+    />
+    <meta
+      property="og:url"
+      content="https://felipecorreia-ti.github.io/Projeto_AHMA/Client/hub.html"
+    />
+
+   
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Hub de Navegação — Projeto A.H.M.A" />
+    <meta
+      name="twitter:description"
+      content="Painel principal de acesso ao monitoramento IoT e à enciclopédia botânica da Horta Mello Ayres."
+    />
+    <meta
+      name="twitter:image"
+      content="https://felipecorreia-ti.github.io/Projeto_AHMA/Client/assets/images/bannerAHMA.png"
+    />
+
+    <link
+      rel="shortcut icon"
+      href="assets/icons/IconTransparente.ico"
+      type="image/x-icon"
+    />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/animations.css" />
+    <link rel="stylesheet" href="src/components/obs_elementos.js">
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="apple-touch-icon" href="./assets/icons/apple-touch-icon.png" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <aside class="sidebar" id="sidebar">
+      <ul class="menu-list">
+        <li><a href="#app-container" class="active">Início</a></li>
+        <li><a href="sensores.html">Monitoramento do Solo</a></li>
+        <li><a href="plantopedia.html">Plantopédia</a></li>
+        <li><a href="#sobre">Sobre</a></li>
+      </ul>
+    </aside>
+
+    <div class="overlay" id="overlayMenu"></div>
+
+    <div id="app-container">
+      <header class="top-header">
+        <button class="botao-sidebar" id="BtnMenu" aria-label="Abrir Menu">
+          ☰ Menu
+        </button>
+
+        <div class="logo-container">
+          <a href="hub.html"
+            ><img
+              src="assets/images/bannerAHMA.png"
+              alt="Logo A.H.M.A"
+              class="banner-img"
+          /></a>
+        </div>
+
+        <!-- 🚪 Mantido idêntico ao layout original -->
+        <a href="#" id="login-content"
+          ><img
+            id="icon-user"
+            src="assets/icons/user-icon.png"
+            alt="icon-usuario"
+          />Sair</a
+        >
+      </header>
+
+      <main id="conteudo-principal">
+        <section class="boxes-container">
+          <a href="sensores.html" class="feature-box">
+            <article>
+              <div class="box-header">
+                <h3>Sistema de monitoramento 💚</h3>
+                <p>
+                  Monitore você mesmo as informações em tempo real, através do nosso sistema IoT:
+                </p>
+              </div>
+              <div class="box-image">
+                <img src="assets/images/Planta 1.jpg" alt="Foto-horta" />
+              </div>
+            </article>
+          </a>
+          <a href="plantopedia.html" class="feature-box">
+            <article>
+              <div class="box-header">
+                <h3>Plantopédia 🌻</h3>
+                <p>
+                  Através da nossa enciclopédia de plantas conheça as principais espécies da nossa horta:
+                </p>
+              </div>
+              <div class="box-image">
+                <img
+                  src="assets/images/Planta 4.jpg"
+                  alt="diversidade_plantas"
+                />
+              </div>
+            </article>
+          </a>
+        </section>
+
+        <section class="box-sobre" id="sobre">
+          <article class="sobre">
+            <h2>Sobre</h2>
+            <br />
+            <p>
+              O A.H.M.A. (<em>Automatização da Horta Mello Ayres</em>) foi um
+              nome escolhido com carinho pelos desenvolvedores para representar
+              esta solução tecnológica. A aplicação visa facilitar a análise das
+              informações técnicas da horta, traduzindo-as para uma linguagem de
+              compreensão universal a partir dos dados coletados.
+            </p>
+            <br />
+            <p>
+              Para que isso aconteça, existe um fluxo contínuo de coleta,
+              tratamento, avaliação e exibição dos dados na forma de gráficos
+              intuitivos. Além do monitoramento em tempo real, a plataforma
+              disponibiliza o conhecimento detalhado das espécies e
+              peculiaridades presentes na horta.
+            </p>
+            <br />
+            <p>
+              Todo o projeto foi pensado para gerar um impacto real: mais do que
+              a entrega de um Trabalho de Conclusão de Curso (TCC),
+              desenvolvemos uma aplicação prática que resolve um problema
+              concreto, conectando a Agricultura 4.0 diretamente às exigências e
+              inovações do mercado de tecnologia.
+            </p>
+          </article>
+        </section>
+      </main>
+
+      <footer class="row-footer" id="contato">
+        <div class="footer-content">
+          <p>
+            &copy; 2026 <strong>A.H.M.A</strong>. Todos os direitos reservados.
+          </p>
+          <p class="devs-credits">
+            Desenvolvido por <strong>Felipe Correia</strong>,
+            <strong>Yago Montouro</strong> e <strong>Pedro Hiago</strong>.
+          </p>
+        </div>
+      </footer>
+    </div>
+
+    <script src="src/components/menu-hamburger.js"></script>
+    <script src="src/components/sticky-header.js"></script>
+    <script src="src/components/scroll-reveal.js"></script>
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("./sw.js")
+            .then((reg) => console.log("Service Worker registrado!", reg.scope))
+            .catch((err) =>
+              console.error("Erro ao registrar Service Worker:", err),
+            );
+        });
+      }
+    </script>
+
+    <script type="module">
+      import { inicializarLogout } from "./src/services/logout.js";
+      inicializarLogout();
+    </script>
+  </body>
+</html>

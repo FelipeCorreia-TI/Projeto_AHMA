@@ -1,0 +1,62 @@
+/* ==========================================================================
+   HEADER - Ação da Direita (Sair / Voltar / Login)
+   ========================================================================== */
+
+.top-header {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    padding: 0.75rem 1.25rem;
+    width: 100%;
+}
+
+.logo-container {
+    justify-self: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.banner-img {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+}
+
+/* Compartilha a mesma posição e alinhamento independente da página */
+#login-content,
+#btn-voltar,
+#btn-logout,
+.header-action-btn {
+    justify-self: end;
+    font-size: 1rem;
+    color: var(--color-white);
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+#icon-user {
+    height: 1.2rem;
+    width: auto;
+    display: block;
+}
+
+@media (min-width: 768px) {
+    .banner-img {
+        height: 50px;
+    }
+
+    #login-content,
+    #btn-voltar,
+    #btn-logout,
+    .header-action-btn {
+        font-size: 1.1rem;
+    }
+}

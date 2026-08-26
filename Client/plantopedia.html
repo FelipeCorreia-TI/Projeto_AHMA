@@ -1,286 +1,251 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plataforma A.H.M.A</title>
-    <link rel="shortcut icon" href="assets/icons/IconTransparente.ico" type="image/x-icon">
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Plataforma A.H.M.A - Plantopédia</title>
 
+    <!-- 🛡️ Proteção de rota no topo do HEAD -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module">
+      import { protegerRota } from "./src/config/auth-guard.js";
+      protegerRota();
+    </script>
+
+    <!-- Título e Meta Tags Base -->
+    <title>Plantopédia — Catálogo de Plantas | A.H.M.A</title>
+    <meta
+      name="description"
+      content="Conheça as espécies cultivadas na Horta Mello Ayres, suas peculiaridades, exigências de luz, solo e dicas de cultivo."
+    />
+    <meta name="robots" content="index, follow" />
+    <link
+      rel="canonical"
+      href="https://felipecorreia-ti.github.io/Projeto_AHMA/Client/plantopedia.html"
+    />
+
+    <!-- Open Graph / Redes Sociais -->
+    <meta property="og:type" content="article" />
+    <meta
+      property="og:title"
+      content="Plantopédia — Catálogo e Guia de Espécies | A.H.M.A"
+    />
+    <meta
+      property="og:description"
+      content="Explore nossa enciclopédia botânica com informações detalhadas sobre as hortaliças e plantas da horta."
+    />
+    <meta
+      property="og:image"
+      content="https://felipecorreia-ti.github.io/Projeto_AHMA/Client/assets/images/Planta%204.jpg"
+    />
+    <meta
+      property="og:url"
+      content="https://felipecorreia-ti.github.io/Projeto_AHMA/Client/plantopedia.html"
+    />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Plantopédia — Catálogo de Plantas | A.H.M.A"
+    />
+    <meta
+      name="twitter:description"
+      content="Explore nossa enciclopédia botânica com informações detalhadas sobre as hortaliças e plantas da horta."
+    />
+    <meta
+      name="twitter:image"
+      content="https://felipecorreia-ti.github.io/Projeto_AHMA/Client/assets/images/Planta%204.jpg"
+    />
+
+    <link
+      rel="shortcut icon"
+      href="assets/icons/IconTransparente.ico"
+      type="image/x-icon"
+    />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/animations.css" />
+    <link rel="stylesheet" href="assets/css/pages/plantopedia.css" />
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="apple-touch-icon" href="./assets/icons/apple-touch-icon.png" />
+  </head>
+  <body>
     <aside class="sidebar" id="sidebar">
-        <ul class="menu-list">
-            <li><a href="index.html" class="active">Início</a></li>
-            <li><a href="sensores.html">Monitoramento do Solo</a></li>
-            <li><a href="plantopedia.html">Plantopédia</a></li>
-        </ul>
+      <ul class="menu-list">
+        <li><a href="./hub.html">Início</a></li>
+        <li><a href="./sensores.html">Monitoramento do Solo</a></li>
+        <li><a href="./plantopedia.html" class="active">Plantopédia</a></li>
+      </ul>
     </aside>
 
     <div class="overlay" id="overlayMenu"></div>
 
     <div id="app-container">
+      <header class="top-header">
+        <button class="botao-sidebar" id="BtnMenu" aria-label="Abrir Menu">
+          ☰ Menu
+        </button>
 
-        <header class="top-header">
-            <button class="botao-sidebar" id="BtnMenu" aria-label="Abrir Menu">☰ Menu</button>
-            
-            <div class="logo-container">
-                <img src="assets/icons/bannerAHMA.png" alt="Logo A.H.M.A" class="banner-img">
-            </div>
-
-        </header>
-
-        <main id="conteudo-principal">
-
-            <section class="pp-hero">
-                <h2>Plantopédia</h2>
-                <p>Conheça as espécies da nossa horta e adicione novas plantas com fotos e informações.</p>
-            </section>
-
-            <section class="pp-toolbar">
-                <button id="ppBtnAdd" class="pp-btn-add" title="Adicionar planta" aria-label="Adicionar planta">+</button>
-                <div class="pp-search">
-                    <span class="pp-search-icon">🔍</span>
-                    <input type="text" id="ppSearch" placeholder="Buscar planta pelo nome...">
-                </div>
-            </section>
-
-            <section class="pp-grid" id="ppGrid"></section>
-
-            <p class="pp-empty" id="ppEmpty" hidden>Nenhuma planta encontrada. Que tal adicionar a primeira? 🌱</p>
-
-        </main>
-
-        <!-- Modal: adicionar planta -->
-        <div class="pp-modal-overlay" id="ppFormOverlay" hidden>
-            <div class="pp-modal">
-                <button class="pp-modal-close" id="ppFormClose" aria-label="Fechar">&times;</button>
-                <h3>Adicionar planta</h3>
-                <form id="ppForm">
-                    <label class="pp-photo-label" for="ppPhotoInput">
-                        Foto da planta
-                        <div class="pp-photo-upload" id="ppPhotoUpload">
-                            <img id="ppPhotoPreview" alt="" hidden>
-                            <span id="ppPhotoPlaceholder">🖼️<br>Clique para escolher uma imagem</span>
-                        </div>
-                        <input type="file" id="ppPhotoInput" accept="image/*" hidden>
-                    </label>
-
-                    <label>Nome popular
-                        <input type="text" id="ppName" required placeholder="Ex: Manjericão">
-                    </label>
-
-                    <label>Nome científico
-                        <input type="text" id="ppScientific" placeholder="Ex: Ocimum basilicum">
-                    </label>
-
-                    <label>Categoria
-                        <select id="ppCategory">
-                            <option>Hortaliça</option>
-                            <option>Erva / Tempero</option>
-                            <option>Fruta</option>
-                            <option>Flor</option>
-                            <option>Outra</option>
-                        </select>
-                    </label>
-
-                    <label>Cuidados / Informações
-                        <textarea id="ppInfo" rows="4" placeholder="Rega, luz solar, solo, curiosidades..."></textarea>
-                    </label>
-
-                    <div class="pp-modal-actions">
-                        <button type="button" class="pp-btn-secondary" id="ppFormCancel">Cancelar</button>
-                        <button type="submit" class="pp-btn-primary">Salvar planta</button>
-                    </div>
-                </form>
-            </div>
+        <div class="logo-container">
+          <a href="hub.html">
+            <img
+              src="assets/images/bannerAHMA.png"
+              alt="Logo A.H.M.A"
+              class="banner-img"
+            />
+          </a>
         </div>
 
-        <!-- Modal: detalhes da planta -->
-        <div class="pp-modal-overlay" id="ppDetailOverlay" hidden>
-            <div class="pp-modal pp-detail">
-                <button class="pp-modal-close" id="ppDetailClose" aria-label="Fechar">&times;</button>
-                <div class="pp-detail-photo" id="ppDetailPhotoWrap">
-                    <img id="ppDetailImg" alt="" hidden>
-                    <span id="ppDetailPlaceholder">🖼️</span>
-                </div>
-                <h3 id="ppDetailName"></h3>
-                <p class="pp-detail-scientific" id="ppDetailScientific"></p>
-                <span class="pp-badge" id="ppDetailCategory"></span>
-                <p class="pp-detail-info" id="ppDetailInfo"></p>
-                <button class="pp-btn-danger" id="ppDetailDelete">Excluir planta</button>
+        <a href="javascript:void(0)" id="btn-voltar">
+          <img
+            id="icon-user"
+            src="assets/icons/icons8-voltar-24.png"
+            alt="icon-voltar"
+          />
+          Voltar
+        </a>
+      </header>
+
+      <main id="conteudo-principal">
+        <section class="pp-hero">
+          <h2>Plantopédia</h2>
+          <p>
+            Conheça as espécies da nossa horta e adicione novas plantas com
+            fotos e informações.
+          </p>
+        </section>
+
+        <section class="pp-toolbar">
+          <button
+            type="button"
+            id="ppBtnAdd"
+            class="pp-btn-add"
+            title="Adicionar planta"
+            aria-label="Adicionar planta"
+          >
+            +
+          </button>
+          <div class="pp-search">
+            <input
+              type="text"
+              id="ppSearch"
+              placeholder="Buscar planta pelo nome..."
+            />
+          </div>
+        </section>
+
+        <section class="pp-grid" id="ppGrid"></section>
+
+        <p class="pp-empty" id="ppEmpty" hidden>
+          Nenhuma planta encontrada. Que tal adicionar a primeira?
+        </p>
+      </main>
+
+      <!-- Modal: adicionar planta -->
+      <div class="pp-modal-overlay" id="ppFormOverlay" hidden>
+        <div class="pp-modal">
+          <button class="pp-modal-close" id="ppFormClose" aria-label="Fechar">
+            &times;
+          </button>
+          <h3>Adicionar planta</h3>
+          <form id="ppForm">
+            <label class="pp-photo-label" for="ppPhotoInput">
+              Foto da planta
+              <div class="pp-photo-upload" id="ppPhotoUpload">
+                <img id="ppPhotoPreview" alt="Prévia da foto" hidden />
+                <span id="ppPhotoPlaceholder"
+                  ><br />Clique para escolher uma imagem</span
+                >
+              </div>
+              <input type="file" id="ppPhotoInput" accept="image/*" hidden />
+            </label>
+
+            <label>
+              Nome popular
+              <input
+                type="text"
+                id="ppName"
+                required
+                placeholder="Ex: Manjericão"
+              />
+            </label>
+
+            <label>
+              Nome científico
+              <input
+                type="text"
+                id="ppScientific"
+                placeholder="Ex: Ocimum basilicum"
+              />
+            </label>
+
+            <label>
+              Categoria
+              <select id="ppCategory">
+                <option>Hortaliça</option>
+                <option>Erva / Tempero</option>
+                <option>Fruta</option>
+                <option>Flor</option>
+                <option>Outra</option>
+              </select>
+            </label>
+
+            <label>
+              Cuidados / Informações
+              <textarea
+                id="ppInfo"
+                rows="4"
+                placeholder="Rega, luz solar, solo, curiosidades..."
+              ></textarea>
+            </label>
+
+            <div class="pp-modal-actions">
+              <button type="button" class="pp-btn-secondary" id="ppFormCancel">
+                Cancelar
+              </button>
+              <button type="submit" class="pp-btn-primary" id="ppBtnSubmit">
+                Salvar planta
+              </button>
             </div>
+          </form>
         </div>
+      </div>
 
-        <footer class="row-footer" id="contato">
-            <div class="footer-content">
-                <p>&copy; 2026 <strong>A.H.M.A</strong>. Todos os direitos reservados.</p>
-                <p class="devs-credits">Desenvolvido por <strong>Felipe Correia</strong>, <strong>Yago Montouro</strong> e <strong>Pedro Hiago</strong>.</p>
-            </div>
-        </footer>
+      <!-- Modal: detalhes da planta -->
+      <div class="pp-modal-overlay" id="ppDetailOverlay" hidden>
+        <div class="pp-modal pp-detail">
+          <button class="pp-modal-close" id="ppDetailClose" aria-label="Fechar">
+            &times;
+          </button>
+          <div class="pp-detail-photo" id="ppDetailPhotoWrap">
+            <img id="ppDetailImg" alt="" hidden />
+            <span id="ppDetailPlaceholder">🌱</span>
+          </div>
+          <h3 id="ppDetailName"></h3>
+          <p class="pp-detail-scientific" id="ppDetailScientific"></p>
+          <span class="pp-badge" id="ppDetailCategory"></span>
+          <p class="pp-detail-info" id="ppDetailInfo"></p>
+          <button class="pp-btn-danger" id="ppDetailDelete">
+            Excluir planta
+          </button>
+        </div>
+      </div>
 
+      <footer class="row-footer" id="contato">
+        <div class="footer-content">
+          <p>
+            &copy; 2026 <strong>A.H.M.A</strong>. Todos os direitos reservados.
+          </p>
+          <p class="devs-credits">
+            Desenvolvido por <strong>Felipe Correia</strong>,
+            <strong>Yago Montouro</strong> e <strong>Pedro Hiago</strong>.
+          </p>
+        </div>
+      </footer>
     </div>
 
-    <script src="assets/js/script.js"></script>
-    <script>
-        // ===== Plantopédia — lógica do catálogo (front-end / localStorage) =====
-        (function () {
-            const STORAGE_KEY = 'ahma_plantopedia_plants';
-
-            const seed = [
-                { id: 's1', nome: 'Tomate', cientifico: 'Solanum lycopersicum', categoria: 'Hortaliça', info: 'Precisa de sol pleno e regas regulares. Colheita entre 60 e 90 dias.', foto: null },
-                { id: 's2', nome: 'Alface', cientifico: 'Lactuca sativa', categoria: 'Hortaliça', info: 'Prefere meia-sombra e solo úmido. Ciclo curto, cerca de 45 dias.', foto: null },
-                { id: 's3', nome: 'Manjericão', cientifico: 'Ocimum basilicum', categoria: 'Erva / Tempero', info: 'Gosta de sol e regas moderadas. Ótimo para repelir alguns insetos.', foto: null },
-                { id: 's4', nome: 'Morango', cientifico: 'Fragaria x ananassa', categoria: 'Fruta', info: 'Solo bem drenado e sol direto. Sensível a excesso de água.', foto: null }
-            ];
-
-            function loadPlants() {
-                try {
-                    const raw = localStorage.getItem(STORAGE_KEY);
-                    if (raw) return JSON.parse(raw);
-                } catch (e) { console.warn('Não foi possível ler o localStorage', e); }
-                return seed;
-            }
-
-            function savePlants(list) {
-                try {
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
-                } catch (e) { console.warn('Não foi possível salvar no localStorage', e); }
-            }
-
-            let plants = loadPlants();
-            let pendingPhoto = null;
-
-            const grid = document.getElementById('ppGrid');
-            const emptyState = document.getElementById('ppEmpty');
-            const searchInput = document.getElementById('ppSearch');
-
-            function renderGrid() {
-                const term = searchInput.value.trim().toLowerCase();
-                const filtered = plants.filter(p => p.nome.toLowerCase().includes(term));
-
-                grid.innerHTML = '';
-                filtered.forEach(p => {
-                    const card = document.createElement('article');
-                    card.className = 'pp-card';
-                    card.innerHTML = `
-                        <div class="pp-card-photo">
-                            ${p.foto ? `<img src="${p.foto}" alt="${p.nome}">` : '🖼️'}
-                        </div>
-                        <div class="pp-card-body">
-                            <span class="pp-badge">${p.categoria}</span>
-                            <h4>${p.nome}</h4>
-                            <p>${p.info || 'Sem informações adicionadas ainda.'}</p>
-                        </div>
-                    `;
-                    card.addEventListener('click', () => openDetail(p.id));
-                    grid.appendChild(card);
-                });
-
-                emptyState.hidden = filtered.length !== 0;
-            }
-
-            searchInput.addEventListener('input', renderGrid);
-
-            // ---- Modal: adicionar planta ----
-            const formOverlay = document.getElementById('ppFormOverlay');
-            const form = document.getElementById('ppForm');
-            const photoUpload = document.getElementById('ppPhotoUpload');
-            const photoInput = document.getElementById('ppPhotoInput');
-            const photoPreview = document.getElementById('ppPhotoPreview');
-            const photoPlaceholder = document.getElementById('ppPhotoPlaceholder');
-
-            document.getElementById('ppBtnAdd').addEventListener('click', () => {
-                form.reset();
-                pendingPhoto = null;
-                photoPreview.hidden = true;
-                photoPlaceholder.hidden = false;
-                formOverlay.hidden = false;
-            });
-
-            function closeForm() { formOverlay.hidden = true; }
-            document.getElementById('ppFormClose').addEventListener('click', closeForm);
-            document.getElementById('ppFormCancel').addEventListener('click', closeForm);
-            formOverlay.addEventListener('click', e => { if (e.target === formOverlay) closeForm(); });
-
-            photoUpload.addEventListener('click', () => photoInput.click());
-            photoInput.addEventListener('change', () => {
-                const file = photoInput.files[0];
-                if (!file) return;
-                const reader = new FileReader();
-                reader.onload = () => {
-                    pendingPhoto = reader.result;
-                    photoPreview.src = pendingPhoto;
-                    photoPreview.hidden = false;
-                    photoPlaceholder.hidden = true;
-                };
-                reader.readAsDataURL(file);
-            });
-
-            form.addEventListener('submit', e => {
-                e.preventDefault();
-                const novaPlanta = {
-                    id: 'p' + Date.now(),
-                    nome: document.getElementById('ppName').value.trim(),
-                    cientifico: document.getElementById('ppScientific').value.trim(),
-                    categoria: document.getElementById('ppCategory').value,
-                    info: document.getElementById('ppInfo').value.trim(),
-                    foto: pendingPhoto
-                };
-                if (!novaPlanta.nome) return;
-
-                plants.unshift(novaPlanta);
-                savePlants(plants);
-                renderGrid();
-                closeForm();
-            });
-
-            // ---- Modal: detalhes / exclusão ----
-            const detailOverlay = document.getElementById('ppDetailOverlay');
-            const detailImg = document.getElementById('ppDetailImg');
-            const detailPlaceholder = document.getElementById('ppDetailPlaceholder');
-            const detailName = document.getElementById('ppDetailName');
-            const detailScientific = document.getElementById('ppDetailScientific');
-            const detailCategory = document.getElementById('ppDetailCategory');
-            const detailInfo = document.getElementById('ppDetailInfo');
-            const detailDeleteBtn = document.getElementById('ppDetailDelete');
-
-            let currentDetailId = null;
-
-            function openDetail(id) {
-                const p = plants.find(pl => pl.id === id);
-                if (!p) return;
-                currentDetailId = id;
-
-                if (p.foto) {
-                    detailImg.src = p.foto;
-                    detailImg.hidden = false;
-                    detailPlaceholder.hidden = true;
-                } else {
-                    detailImg.hidden = true;
-                    detailPlaceholder.hidden = false;
-                }
-                detailName.textContent = p.nome;
-                detailScientific.textContent = p.cientifico || '';
-                detailCategory.textContent = p.categoria;
-                detailInfo.textContent = p.info || 'Sem informações adicionadas ainda.';
-                detailOverlay.hidden = false;
-            }
-
-            function closeDetail() { detailOverlay.hidden = true; currentDetailId = null; }
-            document.getElementById('ppDetailClose').addEventListener('click', closeDetail);
-            detailOverlay.addEventListener('click', e => { if (e.target === detailOverlay) closeDetail(); });
-
-            detailDeleteBtn.addEventListener('click', () => {
-                if (!currentDetailId) return;
-                plants = plants.filter(p => p.id !== currentDetailId);
-                savePlants(plants);
-                renderGrid();
-                closeDetail();
-            });
-
-            renderGrid();
-        })();
-    </script>
-</body>
+    <script src="src/components/menu-hamburger.js"></script>
+    <script src="src/components/sticky-header.js"></script>
+    <script type="module" src="src/pages/plantopedia.js"></script>
+  </body>
 </html>

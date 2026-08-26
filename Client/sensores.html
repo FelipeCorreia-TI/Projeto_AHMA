@@ -1,47 +1,114 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Plataforma A.H.M.A</title>
-    <link rel="shortcut icon" href="assets/icons/IconTransparente.ico" type="image/x-icon">
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
-<body>
-
+    <link
+      rel="shortcut icon"
+      href="assets/icons/IconTransparente.ico"
+      type="image/x-icon"
+    />
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/animations.css" />
+    <link rel="stylesheet" href="assets/css/pages/sensores.css" />
+    <link rel="manifest" href="./manifest.json" />
+    <link rel="apple-touch-icon" href="./assets/icons/apple-touch-icon.png" />
+  </head>
+  <body>
     <aside class="sidebar" id="sidebar">
-        <ul class="menu-list">
-            <li><a href="index.html" class="active">Início</a></li>
-            <li><a href="sensores.html">Monitoramento do Solo</a></li>
-            <li><a href="plantopedia.html">Plantopédia</a></li>
-        </ul>
+      <ul class="menu-list">
+        <li><a href="./hub.html" class="active">Início</a></li>
+        <li><a href="./sensores.html">Monitoramento do Solo</a></li>
+        <li><a href="./plantopedia.html">Plantopédia</a></li>
+      </ul>
     </aside>
 
     <div class="overlay" id="overlayMenu"></div>
 
     <div id="app-container">
+      <header class="top-header">
+        <button class="botao-sidebar" id="BtnMenu" aria-label="Abrir Menu">
+          ☰ Menu
+        </button>
 
-        <header class="top-header">
-            <button class="botao-sidebar" id="BtnMenu" aria-label="Abrir Menu">☰ Menu</button>
-            
-            <div class="logo-container">
-                <img src="assets/icons/bannerAHMA.png" alt="Logo A.H.M.A" class="banner-img">
-            </div>
+        <div class="logo-container">
+          <a href="index.html"
+            ><img
+              src="assets/images/bannerAHMA.png"
+              alt="Logo A.H.M.A"
+              class="banner-img"
+          /></a>
+        </div>
 
-        </header>
+        <a href="hub.html" id="login-content">
+          <img
+            id="icon-user"
+            src="assets/icons/icons8-voltar-24.png"
+            alt="icon-voltar"
+          />Voltar
+        </a>
+      </header>
 
-        <main id="conteudo-principal">
-            
+      <main id="conteudo-principal">
+        <section class="boxes-container">
+          <a href="monitoramento/horta_soja.html" class="feature-box">
+            <article>
+              <div class="box-header">
+                <h3>Monitoramento horta um</h3>
+                <p>Monitore os resuntados da coleta de dados da horta um:</p>
+              </div>
+              <div class="box-image">
+                <img src="assets/images/Planta 5.jpg" alt="Foto-horta" />
+              </div>
+            </article>
+          </a>
 
-        </main>
+          <a href="monitoramento/horta_dois.html" class="feature-box">
+            <article>
+              <div class="box-header">
+                <h3>Monitoramento horta dois</h3>
+                <p>Monitore os resuntados da coleta de dados da horta dois:</p>
+              </div>
+              <div class="box-image">
+                <img src="assets/images/Planta 3.jpg" alt="Foto-horta" />
+              </div>
+            </article>
+          </a>
 
-        <footer class="row-footer" id="contato">
-            <div class="footer-content">
-                <p>&copy; 2026 <strong>A.H.M.A</strong>. Todos os direitos reservados.</p>
-                <p class="devs-credits">Desenvolvido por <strong>Felipe Correia</strong>, <strong>Yago Montouro</strong> e <strong>Pedro Hiago</strong>.</p>
-            </div>
-        </footer>
+          <a href="monitoramento/horta_tres.html" class="feature-box">
+            <article>
+              <div class="box-header">
+                <h3>Monitoramento horta três</h3>
+                <p>Monitore os resuntados da coleta de dados da horta três:</p>
+              </div>
+              <div class="box-image">
+                <img src="assets/images/Planta 2.jpg" alt="Foto-horta" />
+              </div>
+            </article>
+          </a>
+        </section>
+      </main>
 
-    </div> <script src="assets/js/script.js"></script>
-</body>
+      <footer class="row-footer" id="contato">
+        <div class="footer-content">
+          <p>
+            &copy; 2026 <strong>A.H.M.A</strong>. Todos os direitos reservados.
+          </p>
+          <p class="devs-credits">
+            Desenvolvido por <strong>Felipe Correia</strong>,
+            <strong>Yago Montouro</strong> e <strong>Pedro Hiago</strong>.
+          </p>
+        </div>
+      </footer>
+    </div>
+    <script src="../Client/src/components/menu-hamburger.js"></script>
+    <script src="src/components/sticky-header.js"></script>
+    <script type="module">
+      import { protegerRota } from "./src/config/auth-guard.js";
+
+      // Executa antes de carregar a interface da página
+      protegerRota();
+    </script>
+  </body>
 </html>
