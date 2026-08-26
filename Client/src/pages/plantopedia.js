@@ -33,7 +33,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   let arquivoSelecionado = null; // Armazena o arquivo File para o upload
   let nivelAcessoUsuario = "USER"; // Padrão seguro
 
+<<<<<<< HEAD
   // CONFIGURAÇÃO DO BOTÃO VOLTAR
+=======
+
+>>>>>>> aab924435f5486f418335d553dd1154d51a1bcca
   if (btnVoltar) {
     btnVoltar.addEventListener("click", (e) => {
       e.preventDefault();
@@ -149,20 +153,24 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
       }
       resetarFormulario();
-      ppFormOverlay.removeAttribute("hidden");
+      abrirModal(ppFormOverlay);
     };
   }
 
   const fecharModalCadastro = () => {
-    resetarFormulario();
-    ppFormOverlay.setAttribute("hidden", "true");
+    fecharModal(ppFormOverlay, resetarFormulario);
   };
 
   if (ppFormClose) ppFormClose.onclick = fecharModalCadastro;
   if (ppFormCancel) ppFormCancel.onclick = fecharModalCadastro;
 
+<<<<<<< HEAD
   const fecharModalDetalhes = () =>
     ppDetailOverlay.setAttribute("hidden", "true");
+=======
+  const fecharModalDetalhes = () => fecharModal(ppDetailOverlay);
+
+>>>>>>> aab924435f5486f418335d553dd1154d51a1bcca
   if (ppDetailClose) ppDetailClose.onclick = fecharModalDetalhes;
 
   // 5. CARREGAR PLANTAS
@@ -196,7 +204,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  // 6. RENDERIZAR CARDS
+  // 6. RENDERIZAR CARDS (com índice para animação em cascata)
   function renderizarPlantas(plantas) {
     ppGrid.innerHTML = "";
 
@@ -207,9 +215,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     ppEmpty.hidden = true;
 
-    plantas.forEach((planta) => {
+    plantas.forEach((planta, indice) => {
       const card = document.createElement("article");
       card.className = "pp-card";
+      // usado pelo CSS (animation-delay: calc(var(--i) * 45ms)) para
+      // escalonar a entrada dos cards, sem depender de nth-child
+      card.style.setProperty("--i", indice);
 
       const fotoHtml = planta.foto_url
         ? `<img src="${planta.foto_url}" alt="${planta.nome_popular}">`
@@ -282,7 +293,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     }
 
-    ppDetailOverlay.removeAttribute("hidden");
+    abrirModal(ppDetailOverlay);
   }
 
   // 9. SALVAR PLANTA COM UPLOAD PARA O STORAGE
@@ -314,6 +325,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (ppBtnSubmit) {
         ppBtnSubmit.disabled = true;
         ppBtnSubmit.textContent = "Salvando...";
+        ppBtnSubmit.classList.add("ahma-carregando");
       }
 
       try {
@@ -365,6 +377,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (ppBtnSubmit) {
           ppBtnSubmit.disabled = false;
           ppBtnSubmit.textContent = "Salvar planta";
+          ppBtnSubmit.classList.remove("ahma-carregando");
         }
       }
     };
