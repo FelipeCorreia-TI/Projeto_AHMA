@@ -8,22 +8,41 @@ document.addEventListener("DOMContentLoaded", () => {
   const loginForm = document.getElementById("login-form");
   const registerForm = document.getElementById("register-form");
 
-  // 1. ALTERNÂNCIA DE ABAS
+  // Dispara a animação de entrada assim que a página carrega
+  if (loginForm) loginForm.classList.add("ahma-form-entrando");
+
+  // 1. ALTERNÂNCIA DE ABAS (agora com troca suave em vez de instantânea)
   if (tabLogin && tabCadastro && loginForm && registerForm) {
+    const trocarPara = (formMostrar, formEsconder, tabAtiva, tabInativa) => {
+      // já está no form pedido, não faz nada
+      if (formMostrar.style.display === "block") return;
+
+      tabAtiva.classList.add("active");
+      tabInativa.classList.remove("active");
+
+      formEsconder.classList.remove("ahma-form-entrando");
+      formEsconder.style.opacity = "0";
+      formEsconder.style.transform = "translateY(-6px)";
+
+      window.setTimeout(() => {
+        formEsconder.style.display = "none";
+        formMostrar.style.display = "block";
+        // força reflow para reiniciar a animação
+        void formMostrar.offsetWidth;
+        formMostrar.classList.add("ahma-form-entrando");
+        formMostrar.style.opacity = "";
+        formMostrar.style.transform = "";
+      }, 180);
+    };
+
     tabLogin.onclick = (e) => {
       e.preventDefault();
-      tabLogin.classList.add("active");
-      tabCadastro.classList.remove("active");
-      loginForm.style.display = "block";
-      registerForm.style.display = "none";
+      trocarPara(loginForm, registerForm, tabLogin, tabCadastro);
     };
 
     tabCadastro.onclick = (e) => {
       e.preventDefault();
-      tabCadastro.classList.add("active");
-      tabLogin.classList.remove("active");
-      loginForm.style.display = "none";
-      registerForm.style.display = "block";
+      trocarPara(registerForm, loginForm, tabCadastro, tabLogin);
     };
   }
 
@@ -51,6 +70,16 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
+  // Função auxiliar: mostra erro com pequeno "shake" (usada no login e no cadastro)
+  function exibirErroComShake(elemento, mensagem) {
+    if (!elemento) return;
+    elemento.textContent = mensagem;
+    elemento.style.display = "block";
+    elemento.classList.remove("ahma-erro-ativo");
+    void elemento.offsetWidth; // reinicia a animação se o erro já estava visível
+    elemento.classList.add("ahma-erro-ativo");
+  }
+
   // 4. SUBMISSÃO DE LOGIN
   if (loginForm) {
     loginForm.onsubmit = async (e) => {
@@ -67,6 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (errorMessage) {
         errorMessage.textContent = "";
         errorMessage.style.display = "none";
+        errorMessage.classList.remove("ahma-erro-ativo");
       }
 
       if (btnSubmit) {
@@ -103,10 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location.replace("hub.html");
       } catch (error) {
         console.error("Erro no login:", error);
-        if (errorMessage) {
-          errorMessage.textContent = error.message;
-          errorMessage.style.display = "block";
-        }
+        exibirErroComShake(errorMessage, error.message);
       } finally {
         if (btnSubmit) {
           btnSubmit.disabled = false;
@@ -116,7 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
-  // 5. SUBMISSÃO DE CADASTRO 
+  // 5. SUBMISSÃO DE CADASTRO
   if (registerForm) {
     registerForm.onsubmit = async (e) => {
       e.preventDefault();
@@ -134,6 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
         regErrorMsg.textContent = "";
         regErrorMsg.style.display = "none";
         regErrorMsg.style.color = "red";
+        regErrorMsg.classList.remove("ahma-erro-ativo");
       }
 
       // --- VALIDAÇÕES DE LIMITE E REGRAS DE SENHA ---
@@ -187,6 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
           regErrorMsg.style.color = "green";
           regErrorMsg.textContent = "Conta criada com sucesso! Faça login.";
           regErrorMsg.style.display = "block";
+          regErrorMsg.classList.remove("ahma-erro-ativo");
         }
 
         setTimeout(() => {
@@ -223,10 +252,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Função auxiliar para exibir os erros de cadastro
   function exibirErroCadastro(mensagem) {
     const regErrorMsg = document.getElementById("reg-error-message");
-    if (regErrorMsg) {
-      regErrorMsg.style.color = "red";
-      regErrorMsg.textContent = mensagem;
-      regErrorMsg.style.display = "block";
-    }
+    regErrorMsg.style.color = "red";
+    exibirErroComShake(regErrorMsg, mensagem);
   }
 });
