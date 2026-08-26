@@ -89,25 +89,6 @@
 
 .top-header {
   animation: ahma-fade-down var(--dur-media) var(--ease-suave) both;
-
-  /* Cabeçalho fixo: acompanha o scroll em vez de rolar junto com a página */
-  position: sticky;
-  top: 0;
-  z-index: 500;
-
-  /* Garante fundo sólido — sem isso, o conteúdo passaria "por trás"
-     do header ficando visível através dele ao rolar. Ajuste a cor
-     abaixo se o fundo real do seu header não for esse verde escuro. */
-  background-color: var(--ahma-header-bg, #1b3a1f);
-
-  transition: box-shadow var(--dur-rapida) var(--ease-suave);
-}
-
-/* Sombra sutil quando a página está rolada, pra dar profundidade
-   ao header "flutuando" sobre o conteúdo (ativado via JS, ver
-   scroll-reveal.js / cabeçalho fixo) */
-.top-header.ahma-header-rolado {
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
 }
 
 .banner-img {
@@ -236,21 +217,13 @@
 
 /* ==================== SEÇÃO "SOBRE" (fade ao entrar na tela) ==================== */
 
-/* Visível por padrão (progressive enhancement): se o scroll-reveal.js
-   não carregar por algum motivo, o conteúdo NUNCA some. É o próprio
-   JS que adiciona .ahma-oculto antes de animar a entrada. */
-.box-sobre,
-[data-reveal] {
+.box-sobre {
+  opacity: 0;
+  transform: translateY(24px);
   transition: opacity var(--dur-lenta) var(--ease-suave),
               transform var(--dur-lenta) var(--ease-suave);
 }
-.box-sobre.ahma-oculto,
-[data-reveal].ahma-oculto {
-  opacity: 0;
-  transform: translateY(24px);
-}
-.box-sobre.ahma-visivel,
-[data-reveal].ahma-visivel {
+.box-sobre.ahma-visivel {
   opacity: 1;
   transform: translateY(0);
 }
