@@ -262,21 +262,13 @@
 
 /* ==================== SEÇÃO "SOBRE" (fade ao entrar na tela) ==================== */
 
-/* Visível por padrão (progressive enhancement): se o scroll-reveal.js
-   não carregar por algum motivo, o conteúdo NUNCA some. É o próprio
-   JS que adiciona .ahma-oculto antes de animar a entrada. */
-.box-sobre,
-[data-reveal] {
+.box-sobre {
+  opacity: 0;
+  transform: translateY(24px);
   transition: opacity var(--dur-lenta) var(--ease-suave),
               transform var(--dur-lenta) var(--ease-suave);
 }
-.box-sobre.ahma-oculto,
-[data-reveal].ahma-oculto {
-  opacity: 0;
-  transform: translateY(24px);
-}
-.box-sobre.ahma-visivel,
-[data-reveal].ahma-visivel {
+.box-sobre.ahma-visivel {
   opacity: 1;
   transform: translateY(0);
 }
