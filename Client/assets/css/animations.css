@@ -96,9 +96,9 @@
   z-index: 500;
 
   /* Garante fundo sólido — sem isso, o conteúdo passaria "por trás"
-     do header ficando visível através dele ao rolar. Ajuste a cor
-     abaixo se o fundo real do seu header não for esse verde escuro. */
-  background-color: var(--ahma-header-bg, #1b3a1f);
+     do header ficando visível através dele ao rolar. Usa a mesma
+     variável de cor do resto do site (definida em base/variables.css). */
+  background-color: var(--color-primary, #1b382b);
 
   transition: box-shadow var(--dur-rapida) var(--ease-suave);
 }
@@ -117,17 +117,32 @@
   transform: scale(1.04) rotate(-1deg);
 }
 
-#login-content {
+/* Mesmo agrupamento usado em components/header.css: o link de ação
+   da direita muda de id conforme a página (Sair no hub, Voltar na
+   Plantopédia/Sensores/Hortas), então a animação cobre todos eles. */
+#login-content,
+#btn-voltar,
+#btn-logout,
+.header-action-btn {
   transition: color var(--dur-rapida) var(--ease-suave),
               transform var(--dur-rapida) var(--ease-suave);
 }
-#login-content:hover {
+#login-content:hover,
+#btn-voltar:hover,
+#btn-logout:hover,
+.header-action-btn:hover {
   transform: translateX(3px);
 }
-#login-content img {
+#login-content img,
+#btn-voltar img,
+#btn-logout img,
+.header-action-btn img {
   transition: transform var(--dur-rapida) var(--ease-suave);
 }
-#login-content:hover img {
+#login-content:hover img,
+#btn-voltar:hover img,
+#btn-logout:hover img,
+.header-action-btn:hover img {
   transform: translateX(-3px);
 }
 
@@ -135,10 +150,21 @@
 
 .botao-sidebar {
   transition: transform var(--dur-rapida) var(--ease-suave),
-              opacity var(--dur-rapida) var(--ease-suave);
+              opacity var(--dur-rapida) var(--ease-suave),
+              letter-spacing var(--dur-rapida) var(--ease-suave);
+}
+.botao-sidebar:hover {
+  transform: translateX(3px);
+  letter-spacing: 0.5px;
 }
 .botao-sidebar:active {
   transform: scale(0.92);
+}
+
+/* Quando o menu já está aberto, o botão "recua" ao invés de avançar —
+   reforça visualmente a ideia de abrir/fechar */
+.sidebar.aberto ~ #app-container .botao-sidebar:hover {
+  transform: translateX(-3px);
 }
 
 .sidebar {
